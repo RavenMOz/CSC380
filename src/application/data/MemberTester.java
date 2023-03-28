@@ -1,3 +1,6 @@
+package application.data;
+
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -101,6 +104,7 @@ public class MemberTester {
                     System.out.println("INVALID RESPONSE! ( c, Create | d, Delete | list, Show list of Members | q, Quit )");
             }
             if (ans.equals("q")){
+            	sc.close();
                 break;
             }
         }
