@@ -1,31 +1,44 @@
 package application.ui.components;
 
-import javafx.scene.control.Button;
+import application.ui.Main;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
-public class MemberEditor extends VBox {
-
-	private Button save;
-	private Button close;
-	private Button clear;
-	private Button export;
-	private Button share;
+public class MemberEditor extends VBox implements Runnable {
+	
+	Thread t;
 	
 	public MemberEditor() {
 		
 		super(35);
-		save = new Button("Save");
-		close = new Button("Close");
-		clear = new Button("Clear");
-		export = new Button("Export");
-		share = new Button("Share");
 		
-		getChildren().addAll(save, close, clear, export, share);
-		setBackground(Background.fill(new Color(.4, .6, .9, 1)));
-		setMinHeight(4000);
-		setMinWidth(300);
+		TextField f = new TextField();
+		Label l = new Label("Name:");
+		
+		l.setFont(new Font("Lexend", 24));
+		
+		getChildren().addAll(l, f);
+		
+		setBackground(Background.fill(new Color(.8, .9, .99, 1)));
+		setMaxWidth(500);
+		
+		start();
+	}
+	
+	void start() {
+		t = new Thread(this);
+		t.start();
+	}
+
+	@Override
+	public void run() {
+		while (true) {
+			setPrefWidth(Main.stage.getWidth()/3);
+		}
 	}
 	
 }

@@ -12,15 +12,15 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 	
-	private Stage stage;
+	public static Stage stage;
 //	private Scene scene;
 	private BorderPane root;
 	
 	@Override
 	public void start(Stage primaryStage) {
 		
-		this.stage = primaryStage;
-		this.stage.setTitle("Primary Stage");
+		stage = primaryStage;
+		stage.setTitle("Primary Stage");
 
 		this.root = new BorderPane();
 		root.setTop(new GlobalNavigation());
@@ -73,7 +73,7 @@ public class Main extends Application {
 //		root.setTop(label);
 		root.setBackground(Background.fill(Color.DODGERBLUE));
 
-		Scene scene = new Scene(root, 400, 300, Color.DODGERBLUE);
+		Scene scene = new Scene(root, 800, 600, Color.DODGERBLUE);
 		
 		this.stage.setScene(scene);
 		this.stage.show();
