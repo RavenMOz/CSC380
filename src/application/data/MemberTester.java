@@ -55,7 +55,7 @@ public class MemberTester {
                         break;
                     }
                     optionsME();
-                    editor(treeMembers,requestedMember);
+                    memberEditor(treeMembers,requestedMember);
                     break;
                 case "quit": // Quits the Loop.
                     break;
@@ -91,7 +91,7 @@ public class MemberTester {
     /* Function Methods:
      *      These are the functions for certain sections of the editor.
      */
-    private static Member editor( ArrayList<Member> treeMembers, Member requestedMember ){
+    private static Member memberEditor( ArrayList<Member> treeMembers, Member requestedMember ){
         for (;;){
             Scanner sc = new Scanner(System.in);
             String memberName = requestedMember.getName();
