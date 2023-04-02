@@ -11,16 +11,21 @@ public class Member {
     int bDay; int bMonth; int bYear;
     ArrayList<Member> children;
     Member mother; Member father; Member spouse;
-    int memberID;
+    long memberID;
 
     /* Constructor: Creates a member with inputted name and inputted biography
      */
     public Member( String iName ){
+    	this(iName, null);
+    }
+    
+    public Member( String iName, String bio ){
         this.name = iName;
         this.bDay = 0;
         this.bMonth = 0;
         this.bYear = 0;
-        this.biography = null;
+        this.biography = bio;
+        memberID = System.currentTimeMillis();
         mother = null;
         father = null;
         children = null;

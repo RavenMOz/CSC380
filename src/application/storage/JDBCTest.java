@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import application.data.Member;
+
 public class JDBCTest {
 
 	public static void main(String[] args) throws SQLException {
@@ -13,7 +15,7 @@ public class JDBCTest {
 		String url = "jdbc:mysql://localhost:3306/familytree";
 		String uname = "testuser";
 		String pwd = "123";
-		String query = "select * from Members";
+		String query = "INSERT INTO Members VALUES (1337, 'Arthur Morgan', 'Western Gunslinger', 6, 9, 1863, 0, 420, 69, 0);";
 		
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
@@ -37,6 +39,11 @@ public class JDBCTest {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	void insertMember(Member m) {
+		
+		String query = "INSERT INTO Members VALUES";
 	}
 	
 }
