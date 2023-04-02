@@ -43,7 +43,10 @@ public class JDBCTest {
 	
 	void insertMember(Member m) {
 		
+		long mid = m.memberID;
+		
 		String query = "INSERT INTO Members VALUES";
+		
 	}
 	
 }
