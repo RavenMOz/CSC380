@@ -1,6 +1,6 @@
-package application.ui.components;
+package application.oldui.components;
 
-import application.ui.Main;
+import application.oldui.Main;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
