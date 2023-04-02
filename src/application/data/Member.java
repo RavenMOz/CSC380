@@ -11,6 +11,7 @@ public class Member {
     int bDay; int bMonth; int bYear;
     ArrayList<Member> children;
     Member mother; Member father; Member spouse;
+    int memberID;
 
     /* Constructor: Creates a member with inputted name and inputted biography
      */
