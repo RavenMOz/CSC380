@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import application.data.Member;
+import application.treeutil.Family;
 
 public class JDBCTest {
 
@@ -15,6 +16,7 @@ public class JDBCTest {
 	static final String pwd = "123";
 	static long micahID;
 	static Member[] membs;
+	static Family activeFamily;
 	
 	static String bars = "\n-------------------\n";
 	
@@ -97,7 +99,7 @@ public class JDBCTest {
 				if (i==10) spouse = Integer.parseInt(famdata);
 				
 			}
-			mems[c] = new Member(mID, name, bio, bDay, bMonth, bYear, children, mother, father, spouse);
+			mems[c] = new Member(mID, name, bio, bDay, bMonth, bYear, children, mother, father, spouse, 0);
 			c++;
 		} 
 		if (c == 0) System.out.println("No members found!");
@@ -144,11 +146,11 @@ public class JDBCTest {
 	
 	static Member[] getMembersArray() {
 		Member[] mems = new Member[5];
-		mems[0] = new Member("John Marston", "Scarfaced outlaw who never learned to swim.");
-		mems[1] = new Member("Micah Bell", "A survivor with anger issues and trendy facial hair.");
-		mems[2] = new Member("Dutch Van Der Linde", "Always has a plan, usually involving a train.");
-		mems[3] = new Member("Arthur Morgan", "The man with the black lung.");
-		mems[4] = new Member("Marion \"Bill\" Williamson", "Disgraced cavalryman who is as dangerous as he is dumb.");
+		mems[0] = new Member("John Marston", "Scarfaced outlaw who never learned to swim.", 0);
+		mems[1] = new Member("Micah Bell", "A survivor with anger issues and trendy facial hair.", 0);
+		mems[2] = new Member("Dutch Van Der Linde", "Always has a plan, usually involving a train.", 0);
+		mems[3] = new Member("Arthur Morgan", "The man with the black lung.", 0);
+		mems[4] = new Member("Marion \"Bill\" Williamson", "Disgraced cavalryman who is as dangerous as he is dumb.", 0);
 		
 		micahID = mems[1].memberID;
 		
