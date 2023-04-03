@@ -40,7 +40,7 @@ public class Member {
         this.bMonth = bMonth2;
         this.bYear = bYear2;
         this.biography = bio;
-        memberID = System.currentTimeMillis() + (long)(Math.random() * 100);
+        memberID = mID;
         mother = null;
         father = null;
         children = null;
