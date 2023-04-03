@@ -12,20 +12,22 @@ public class Member {
     ArrayList<Member> children;
     Member mother; Member father; Member spouse;
     public final long memberID;
+    public final long familyID;
 
     /* Constructor: Creates a member with inputted name and inputted biography
      */
-    public Member( String iName ){
-    	this(iName, null);
+    public Member( String iName , long famID ){
+    	this(iName, null, famID);
     }
     
-    public Member( String iName, String bio ){
+    public Member( String iName, String bio , long famID){
         this.name = iName;
         this.bDay = 0;
         this.bMonth = 0;
         this.bYear = 0;
         this.biography = bio;
         memberID = System.currentTimeMillis() + (long)(Math.random() * 100);
+        familyID = famID;
         mother = null;
         father = null;
         children = null;
@@ -34,12 +36,13 @@ public class Member {
     }
 
     public Member(long mID, String name2, String bio, int bDay2, int bMonth2, int bYear2, int children2, int mother2,
-			int father2, int spouse2) {
+			int father2, int spouse2, long famID) {
     	this.name = name2;
         this.bDay = bDay2;
         this.bMonth = bMonth2;
         this.bYear = bYear2;
         this.biography = bio;
+        familyID = famID;
         memberID = mID;
         mother = null;
         father = null;
