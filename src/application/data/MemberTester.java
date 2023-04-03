@@ -21,7 +21,7 @@ public class MemberTester {
                 case "create": // Create a new Member
                     System.out.println("| Enter the new member's name: ");
                     System.out.print("| Name> "); iName = sc.nextLine();
-                    Member member = new Member(iName);
+                    Member member = new Member(iName, 0);
                     treeMembers.add(member);
                     break;
                 case "delete": // Delete a Member
