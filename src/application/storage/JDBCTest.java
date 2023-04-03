@@ -14,6 +14,7 @@ public class JDBCTest {
 	static final String uname = "testuser";
 	static final String pwd = "123";
 	static long micahID;
+	static Member[] membs;
 	
 	static String bars = "\n-------------------\n";
 	
@@ -31,6 +32,8 @@ public class JDBCTest {
 		getMembers();
 		getMemberByID(micahID);
 		constructMembers();
+		editMembers();
+		getMembers();
 		clearMembers();
 		getMembers();
 		
@@ -98,6 +101,7 @@ public class JDBCTest {
 			c++;
 		} 
 		if (c == 0) System.out.println("No members found!");
+		membs = mems;
 		return mems;
 	}
 	
@@ -181,6 +185,34 @@ public class JDBCTest {
 			c++;
 		} 
 		if (c == 0) System.out.println("No members found!");
+	}
+	
+	static void editMembers() {
+		
+		System.out.println(bars +
+				   "Editing & Rewriting Members..." +
+				   bars);
+		
+		for (Member m : membs) {
+			m.setName("John Doe");
+			update(m);
+		}
+	}
+	
+	static void update(Member m) {
+		System.out.println(m.getName());
+		String query = "UPDATE Members SET"
+				+ " name = '" + m.getName() + "',"
+				+ " biography = '" + m.getBio() + "',"
+				+ " bDay = " + m.getBDay() + ","
+				+ " bMonth = " + m.getBMonth() + ","
+				+ " bYear = " + m.getBYear()
+//				+ "children = " + m.getChildren() + ","
+//				+ "mother = " + m.getName() + ","
+//				+ "father = " + m.getName() + ","
+//				+ "spouse = " + m.getName() + ","
+				+ " WHERE memberID = " + m.memberID + "";
+		send(query);
 	}
 	
 	static void insertMember(Member m) {
