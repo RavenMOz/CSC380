@@ -25,7 +25,7 @@ public class Member {
         this.bMonth = 0;
         this.bYear = 0;
         this.biography = bio;
-        memberID = System.currentTimeMillis();
+        memberID = System.currentTimeMillis() + (long)(Math.random() * 100);
         mother = null;
         father = null;
         children = null;
@@ -33,7 +33,21 @@ public class Member {
 
     }
 
-    /* The Methods of this class are the following:
+    public Member(long mID, String name2, String bio, int bDay2, int bMonth2, int bYear2, int children2, int mother2,
+			int father2, int spouse2) {
+    	this.name = name2;
+        this.bDay = bDay2;
+        this.bMonth = bMonth2;
+        this.bYear = bYear2;
+        this.biography = bio;
+        memberID = System.currentTimeMillis() + (long)(Math.random() * 100);
+        mother = null;
+        father = null;
+        children = null;
+        spouse = null;
+	}
+
+	/* The Methods of this class are the following:
      *      Get = Fetches variable following the get section of the method's title.
      *      Set = Replaces a variable with a given input.
      *      Add = adds a value to a given variable.
@@ -83,6 +97,10 @@ public class Member {
     //Clear: ( ! )
     public void clearChildren(){
         // clear all the children from the array.
+    }
+    
+    public String toString() {
+    	return "ID: " + memberID + " | Name: " + name + " | Bio: " + biography; 
     }
 
 }
