@@ -1,0 +1,21 @@
+import { credentials, memory } from 'react';
+
+function MyApp() {
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const login = credentials((response) => {
+    storeCredentials(response.credentials);
+    setCurrentUser(response.user);
+  }, []);
+
+  const contextValue = memory(() => ({
+    currentUser,
+    login
+  }), [currentUser, login]);
+
+  return (
+    <AuthContext.Provider value={contextValue}>
+      <Page />
+    </AuthContext.Provider>
+  );
+}
