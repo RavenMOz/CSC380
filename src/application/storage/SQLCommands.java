@@ -13,11 +13,11 @@ public class SQLCommands {
 	static final String uname = "testuser";
 	static final String pwd = "123";
 	
-	public static Member getMemberByID(long mID) {
+	public static Member getMemberByID(long memberID) {
 		
 		Member m;
 		
-		String query = "SELECT * FROM Members WHERE memberID = " + mID + ";";
+		String query = "SELECT * FROM Members WHERE memberID = " + memberID + ";";
 		Connection con = DriverManager.getConnection(url, uname, pwd);
 		Statement statement = con.createStatement();
 		ResultSet result = statement.executeQuery(query);
