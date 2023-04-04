@@ -1,3 +1,5 @@
+package application.data;
+
 import java.util.ArrayList;
 
 public class Member {
@@ -45,6 +47,8 @@ public class Member {
         this.children = null;
         this.childCount = 0;
         this.spouse = null;
+        this.familyID = 0;
+        this.memberID = System.currentTimeMillis() + (int) (Math.random() * 100);
 
     }
     // Name:
@@ -59,6 +63,8 @@ public class Member {
         this.children = null;
         this.childCount = 0;
         this.spouse = null;
+        this.familyID = 0;
+        this.memberID = System.currentTimeMillis() + (int) (Math.random() * 100);
     }
     // Name & Biography:
     public Member ( String iName, String iBio ){
@@ -72,6 +78,8 @@ public class Member {
         this.children = null;
         this.childCount = 0;
         this.spouse = null;
+        this.familyID = 0;
+        this.memberID = System.currentTimeMillis() + (int) (Math.random() * 100);
     }
     // Name, Bio and FamID:
     public Member ( String iName, String iBiography, long famID ){
@@ -86,6 +94,7 @@ public class Member {
         parentTwo = null;
         children = null;
         spouse = null;
+
     }
     // The Weird One:
     public Member(long mID, String name2, String bio, int bDay2, int bMonth2, int bYear2, int children2, int mother2,
