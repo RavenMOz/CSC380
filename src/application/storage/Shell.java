@@ -75,6 +75,7 @@ public class Shell {
 			
 		}
 		sc.close();
+		System.out.println("Goodbye!");
 	}
 
 }
