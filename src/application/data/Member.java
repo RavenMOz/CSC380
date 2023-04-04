@@ -20,9 +20,17 @@ public class Member {
     int childCount;
     Member parentOne; Member parentTwo;
     Member spouse;
+    public final long memberID;
+    public final long familyID;
 
-    /* Default Constructor:
-    */
+    /* Constructors:
+     *      Emtpy
+     *      Name
+     *      Name & Bio
+     *      Name, Bio & FamID
+     *      The Weird One...
+     */
+    // Empty:
     public Member(){
         this.name = null;
         this.bDay = 0;
@@ -36,7 +44,7 @@ public class Member {
         this.spouse = null;
 
     }
-    // with Name:
+    // Name:
     public Member( String iName ){
         this.name = iName;
         this.biography = null;
@@ -49,7 +57,7 @@ public class Member {
         this.childCount = 0;
         this.spouse = null;
     }
-    // with Name & Biography:
+    // Name & Biography:
     public Member ( String iName, String iBio ){
         this.name = iName;
         this.biography = iBio;
@@ -62,6 +70,35 @@ public class Member {
         this.childCount = 0;
         this.spouse = null;
     }
+    // Name, Bio and FamID:
+    public Member ( String iName, String iBiography, long famID ){
+        this.name = iName;
+        this.bDay = 0;
+        this.bMonth = 0;
+        this.bYear = 0;
+        this.biography = iBiography;
+        memberID = System.currentTimeMillis() + (long)(Math.random() * 100);
+        familyID = famID;
+        parentOne = null;
+        parentTwo = null;
+        children = null;
+        spouse = null;
+    }
+    // The Weird One:
+    public Member(long mID, String name2, String bio, int bDay2, int bMonth2, int bYear2, int children2, int mother2,
+                  int father2, int spouse2, long famID) {
+        this.name = name2;
+        this.bDay = bDay2;
+        this.bMonth = bMonth2;
+        this.bYear = bYear2;
+        this.biography = bio;
+        familyID = famID;
+        memberID = mID;
+        parentOne = null;
+        parentTwo = null;
+        children = null;
+        spouse = null;
+    }
 
     /* The Methods of this class are the following:
      *      Get = Fetches variable following the get section of the method's title.
@@ -70,6 +107,7 @@ public class Member {
      *      Remove = Removes (nulls?) a value from a variable.
      *      Clear = Clears an array.
      *      Has = Boolean methods that checks if a variable is filled in or not. [ NEW! ]
+     *      toString = Prints a String.
     */
     // Get:
     public String getName(){ if ( name == null ) return "EMPTY"; else return this.name; }
@@ -130,4 +168,7 @@ public class Member {
     public boolean hasParentTwo() { return parentTwo != null; } // NEW!
     public boolean hasSpouse(){ return spouse != null; } // NEW!
     public boolean hasChildren(){ return children != null; } // NEW!
+
+    //toString:
+    public String toString(){ return "ID: "+memberID+" | Name: "+name+" | Bio: "+biography; }
 }
