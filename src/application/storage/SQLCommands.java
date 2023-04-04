@@ -3,6 +3,7 @@ package application.storage;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import application.data.Member;
@@ -13,9 +14,9 @@ public class SQLCommands {
 	static final String uname = "testuser";
 	static final String pwd = "123";
 	
-	public static Member getMemberByID(long memberID) {
+	public static Member getMemberByID(long memberID) throws SQLException {
 		
-		Member m;
+		Member m = null;
 		
 		String query = "SELECT * FROM Members WHERE memberID = " + memberID + ";";
 		Connection con = DriverManager.getConnection(url, uname, pwd);
