@@ -1,109 +1,133 @@
-package application.data;
-
 import java.util.ArrayList;
 
 public class Member {
-    /* This Object holds the name, Biography, Parents, Children and Spouse of a
-     * given member of the tree.
+    /* Updated Changes:
+     *      o Created series of Has methods.
+     *          I   hasSpouse()
+     *          II  hasChildren()
+     *          III hasParent()
+     *      o Wrote the clearChildren() method.
+     *      o Reintroduced the parent methods and variables.
+     *      o Removed the mother and father variables and their associated methods.
+     *      o Created two more Constructors, one with a given Name and one with the given Name AND Biography.
+     *      o Created a childCount variable.
      */
     // Variables:
-    String name; String biography;
+    String name;
+    String biography;
     int bDay; int bMonth; int bYear;
     ArrayList<Member> children;
-    Member mother; Member father; Member spouse;
-    public final long memberID;
-    public final long familyID;
+    int childCount;
+    Member parentOne; Member parentTwo;
+    Member spouse;
 
-    /* Constructor: Creates a member with inputted name and inputted biography
-     */
-    public Member( String iName , long famID ){
-    	this(iName, null, famID);
-    }
-    
-    public Member( String iName, String bio , long famID){
-        this.name = iName;
+    /* Default Constructor:
+    */
+    public Member(){
+        this.name = null;
         this.bDay = 0;
         this.bMonth = 0;
         this.bYear = 0;
-        this.biography = bio;
-        memberID = System.currentTimeMillis() + (long)(Math.random() * 100);
-        familyID = famID;
-        mother = null;
-        father = null;
-        children = null;
-        spouse = null;
+        this.biography = null;
+        this.parentOne = null;
+        this.parentTwo = null;
+        this.children = null;
+        this.childCount = 0;
+        this.spouse = null;
 
     }
+    // with Name:
+    public Member( String iName ){
+        this.name = iName;
+        this.biography = null;
+        this.bDay = 0;
+        this.bMonth = 0;
+        this.bYear = 0;
+        this.parentOne = null;
+        this.parentTwo = null;
+        this.children = null;
+        this.childCount = 0;
+        this.spouse = null;
+    }
+    // with Name & Biography:
+    public Member ( String iName, String iBio ){
+        this.name = iName;
+        this.biography = iBio;
+        this.bDay = 0;
+        this.bMonth = 0;
+        this.bYear = 0;
+        this.parentOne = null;
+        this.parentTwo = null;
+        this.children = null;
+        this.childCount = 0;
+        this.spouse = null;
+    }
 
-    public Member(long mID, String name2, String bio, int bDay2, int bMonth2, int bYear2, int children2, int mother2,
-			int father2, int spouse2, long famID) {
-    	this.name = name2;
-        this.bDay = bDay2;
-        this.bMonth = bMonth2;
-        this.bYear = bYear2;
-        this.biography = bio;
-        familyID = famID;
-        memberID = mID;
-        mother = null;
-        father = null;
-        children = null;
-        spouse = null;
-	}
-
-	/* The Methods of this class are the following:
+    /* The Methods of this class are the following:
      *      Get = Fetches variable following the get section of the method's title.
      *      Set = Replaces a variable with a given input.
      *      Add = adds a value to a given variable.
      *      Remove = Removes (nulls?) a value from a variable.
      *      Clear = Clears an array.
+     *      Has = Boolean methods that checks if a variable is filled in or not. [ NEW! ]
     */
-    // Get: ( ! )
-    public String getName(){ return this.name;      }
-    public String getBio(){  return this.biography; }
-    public int getBDay(){    return this.bDay;      }
-    public int getBMonth(){  return this.bMonth;    }
-    public int getBYear(){   return this.bYear;     }
-    public Member getChildren(){
-        // Return the whole list of children? A single child? Which child?
+    // Get:
+    public String getName(){ if ( name == null ) return "EMPTY"; else return this.name; }
+    public String getBio(){ if ( biography == null ) return "EMPTY"; else return this.biography; }
+    public int getBDay(){ return this.bDay; }
+    public int getBMonth(){ return this.bMonth; }
+    public int getBYear(){ return this.bYear; }
+    public Member getParentOne(){ return this.parentOne; }
+    public Member getParentTwo(){ return this.parentTwo; }
+    public ArrayList<Member> getChildren(){ return this.children;  }
+    public Member getChild( Member iChild ){
+        if ( children.contains(iChild) ){
+            for ( int counter = 0; counter < children.size(); counter++ ){
+                if ( children.get(counter) == iChild ){
+                    return children.get(counter);
+                }
+            }
+        }
         return null;
     }
-    public Member getParents(){
-        // return a parent? which parent?
-        return null;
+    public Member getChild( int index ){
+        return children.get(index);
     }
-    public Member getSpouse(){ return this.spouse;   }
+    public Member getSpouse(){ return this.spouse; }
 
-    //Set: ( ! )
-    public void setName( String newName ){      this.name = newName;         }
-    public void setBio( String newBio ){        this.biography = newBio;     }
-    public void setBDay( int newBirthDay ){     this.bDay = newBirthDay;     }
+    //Set:
+    public void setName( String newName ){ this.name = newName; }
+    public void setBio( String newBio ){ this.biography = newBio; }
+    public void setBDay( int newBirthDay ){ this.bDay = newBirthDay; }
     public void setBMonth( int newBirthMonth ){ this.bMonth = newBirthMonth; }
-    public void setBYear( int newBirthYear ){   this.bYear = newBirthYear;   }
-    public void setSpouse( Member iSpouse ){    this.spouse = iSpouse;       }
+    public void setBYear( int newBirthYear ){ this.bYear = newBirthYear; }
+    public void setSpouse( Member newSpouse ){ this.spouse = newSpouse; }
 
-    //Add: ( ! )
-    public void addChild( Member iChild ){
-        // Adds a child to the array of children Members.
-    }
-    public void addParent( Member iParent ){
-        // adds a parent... to? parentOne? parentTwo?
-    }
+    //Add:
+    public void addChild( Member iChild ){ this.children.add(childCount,iChild); childCount++; } // NEW!
+    public void addParent( Member newParent ){
+        if ( parentOne == null ){ this.parentOne = newParent; }
+        else if ( parentTwo == null ){ this.parentTwo = newParent; }
+    } // NEW!
 
-    //Remove: ( ! )
+    //Remove:
     public void removeChild( Member iChild ){
-        // removes a child from the array of the children Members.
-    }
-    public void removeParent( Member iParent ){
-        // Check to make sure that the parent exits.
-    }
+        for ( int counter = 0; counter < childCount; counter++ ){
+            if ( children.get(counter) == iChild ){
+                this.children.remove(counter);
+                this.childCount--;
+            }
+        }
+    } // NEW!
+    public void removeParent( Member iParent ){ if ( parentOne == iParent ){ parentOne = null; } else if ( parentTwo == iParent ) { parentTwo = null; } } // NEW!
 
-    //Clear: ( ! )
-    public void clearChildren(){
-        // clear all the children from the array.
-    }
-    
-    public String toString() {
-    	return "ID: " + memberID + " | Name: " + name + " | Bio: " + biography; 
-    }
+    //Clear:
+    public void clearChildren(){ this.children.removeAll(children); childCount = 0; } // NEW!
 
+    //Has:
+    public boolean hasParent(){ if ( parentOne != null ) { return true; } else return parentTwo != null; } // NEW!
+    public boolean hasParentOne() { return parentOne != null; } // NEW!
+    public boolean hasParentTwo() { return parentTwo != null; } // NEW!
+    public boolean hasSpouse(){ return spouse != null; } // NEW!
+    public boolean hasChildren(){ return children != null; } // NEW!
 }
