@@ -11,6 +11,9 @@ public class Member {
      *      o Removed the mother and father variables and their associated methods.
      *      o Created two more Constructors, one with a given Name and one with the given Name AND Biography.
      *      o Created a childCount variable.
+     *      o Applied Sam's Changes:
+     *          - Family ID & Member ID
+                - toString()
      */
     // Variables:
     String name;
