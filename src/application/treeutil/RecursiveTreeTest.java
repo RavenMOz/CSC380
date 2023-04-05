@@ -1,4 +1,4 @@
-package treelinecalculationsalgorithm;
+package application.treeutil;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
