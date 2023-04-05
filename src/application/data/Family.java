@@ -1,13 +1,23 @@
+package application.data;
+
 import java.util.ArrayList;
+
+import application.storage.SQLCommands;
 
 public class Family {
     /* Variables:
      */
     ArrayList<Member> familyMembers;
     Member root;
+    private final long familyID;
     /* Constructor:
      */
-    public Family(){ this.familyMembers = new ArrayList<>(); this.root = null;}
+    public Family(){ this.familyMembers = new ArrayList<>(); this.root = null; this.familyID = 1;}
+    public Family(long famID){ 
+    	this.familyMembers = SQLCommands.getMembersByFamID();
+    	
+    	this.root = null;
+    }
     /* Methods:
      *      Get = Fetches variable following the get section of the method's title.
      *      Add = adds a value to a given variable.
