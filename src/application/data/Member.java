@@ -50,7 +50,7 @@ public class Member {
         this.childCount = 0;
         this.spouse = null;
         this.familyID = 0;
-        this.memberID = System.currentTimeMillis() + (int) (Math.random() * 100);
+        this.memberID = newID();
 
     }
     // Name:
@@ -66,7 +66,7 @@ public class Member {
         this.childCount = 0;
         this.spouse = null;
         this.familyID = 0;
-        this.memberID = System.currentTimeMillis() + (int) (Math.random() * 100);
+        this.memberID = newID();
     }
     // Name & Biography:
     public Member ( String iName, String iBio ){
@@ -81,7 +81,7 @@ public class Member {
         this.childCount = 0;
         this.spouse = null;
         this.familyID = 0;
-        this.memberID = System.currentTimeMillis() + (int) (Math.random() * 100);
+        this.memberID = newID();
     }
     // Name, Bio and FamID:
     public Member ( String iName, String iBiography, long famID ){
@@ -90,13 +90,17 @@ public class Member {
         this.bMonth = 0;
         this.bYear = 0;
         this.biography = iBiography;
-        memberID = System.currentTimeMillis() + (long)(Math.random() * 100);
+        memberID = 
         familyID = famID;
         parentOne = null;
         parentTwo = null;
         children = null;
         spouse = null;
 
+    }
+    // Used for adding a new child to an existing member
+    public Member(Member p1, Member p2) {
+    	this(newID(), p1.getFamilyID(), "", "", 0, 0, 0, p1.getMemberID(), p2.getMemberID(), 0);
     }
     // The Weird One:
     public Member(long mID, long famID, String name2, String bio, int bDay2, int bMonth2, int bYear2, long p1,
@@ -183,5 +187,8 @@ public class Member {
 
     //toString:
     public String toString(){ return "ID: "+memberID+" | Name: "+name+" | Bio: "+biography; }
+    
+    // Utility
+    private static long newID() { return System.currentTimeMillis() + (long)(Math.random() * 100); }
   
 }
