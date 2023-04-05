@@ -1,6 +1,5 @@
 package application.data;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import application.storage.SQLCommands;
@@ -150,6 +149,8 @@ public class Member {
         return children.get(index);
     }
     public Member getSpouse(){ return this.spouse; }
+    public long getMemberID() { return memberID; }
+    public long getFamilyID() { return familyID; }
 
     //Set:
     public void setName( String newName ){ this.name = newName; }
@@ -167,14 +168,7 @@ public class Member {
     } // NEW!
 
     //Remove:
-    public void removeChild( Member iChild ){
-        for ( int counter = 0; counter < childCount; counter++ ){
-            if ( children.get(counter) == iChild ){
-                this.children.remove(counter);
-                this.childCount--;
-            }
-        }
-    } // NEW!
+    public void removeChild( Member iChild ){ children.remove(iChild); } // NEW!
     public void removeParent( Member iParent ){ if ( parentOne == iParent ){ parentOne = null; } else if ( parentTwo == iParent ) { parentTwo = null; } } // NEW!
 
     //Clear:
@@ -189,4 +183,5 @@ public class Member {
 
     //toString:
     public String toString(){ return "ID: "+memberID+" | Name: "+name+" | Bio: "+biography; }
+  
 }
