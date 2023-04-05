@@ -1,6 +1,10 @@
 package application.data;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+
+import application.storage.SQLCommands;
 
 public class Member {
     /* Updated Changes:
@@ -97,8 +101,8 @@ public class Member {
 
     }
     // The Weird One:
-    public Member(long mID, String name2, String bio, int bDay2, int bMonth2, int bYear2, int children2, int mother2,
-                  int father2, int spouse2, long famID) {
+    public Member(long mID, long famID, String name2, String bio, int bDay2, int bMonth2, int bYear2, long p1,
+                  long p2, long sps) {
         this.name = name2;
         this.bDay = bDay2;
         this.bMonth = bMonth2;
@@ -106,10 +110,28 @@ public class Member {
         this.biography = bio;
         familyID = famID;
         memberID = mID;
-        parentOne = null;
-        parentTwo = null;
-        children = null;
-        spouse = null;
+        
+        try {
+			parentOne = SQLCommands.getMemberByID(p1);
+		} catch (SQLException e) {
+			parentOne = null;
+		}
+        try {
+			parentTwo = SQLCommands.getMemberByID(p2);
+		} catch (SQLException e) {
+			parentTwo = null;
+		}
+        try {
+			spouse = SQLCommands.getMemberByID(sps);
+		} catch (SQLException e) {
+			spouse = null;
+		}
+        try {
+			children = SQLCommands.getChildrenByParentID(memberID);
+		} catch (SQLException e) {
+			children = new ArrayList<Member>();
+		}
+     
     }
 
     /* The Methods of this class are the following:
