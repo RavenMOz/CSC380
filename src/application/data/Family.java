@@ -12,7 +12,7 @@ public class Family {
     private final long familyID;
     /* Constructor:
      */
-    public Family(){ this.familyMembers = new ArrayList<>(); this.root = null; this.familyID = 1;}
+    public Family(){ this.familyMembers = new ArrayList<>(); this.root = null; this.familyID = System.currentTimeMillis() + (long)(Math.random() * 100);}
     public Family(long famID){ 
     	this.familyMembers = SQLCommands.getMembersByFamID(famID);
     	familyID = famID;
