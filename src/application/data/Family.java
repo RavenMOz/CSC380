@@ -14,8 +14,8 @@ public class Family {
      */
     public Family(){ this.familyMembers = new ArrayList<>(); this.root = null; this.familyID = 1;}
     public Family(long famID){ 
-    	this.familyMembers = SQLCommands.getMembersByFamID();
-    	
+    	this.familyMembers = SQLCommands.getMembersByFamID(famID);
+    	familyID = famID;
     	this.root = null;
     }
     /* Methods:
@@ -53,4 +53,7 @@ public class Family {
     }
     // Clear:
     public void clearMembers(){ familyMembers.clear(); }
+	public long getFamilyID() {
+		return familyID;
+	}
 }
