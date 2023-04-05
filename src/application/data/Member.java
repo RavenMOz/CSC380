@@ -2,7 +2,6 @@ package application.data;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 import application.storage.SQLCommands;
 
@@ -111,26 +110,11 @@ public class Member {
         familyID = famID;
         memberID = mID;
         
-        try {
-			parentOne = SQLCommands.getMemberByID(p1);
-		} catch (SQLException e) {
-			parentOne = null;
-		}
-        try {
-			parentTwo = SQLCommands.getMemberByID(p2);
-		} catch (SQLException e) {
-			parentTwo = null;
-		}
-        try {
-			spouse = SQLCommands.getMemberByID(sps);
-		} catch (SQLException e) {
-			spouse = null;
-		}
-        try {
-			children = SQLCommands.getChildrenByParentID(memberID);
-		} catch (SQLException e) {
-			children = new ArrayList<Member>();
-		}
+		parentOne = SQLCommands.getMemberByID(p1);
+		parentTwo = SQLCommands.getMemberByID(p2);
+		spouse = SQLCommands.getMemberByID(sps);
+		children = SQLCommands.getChildrenByParentID(memberID);
+
      
     }
 
