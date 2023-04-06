@@ -85,17 +85,7 @@ public class Member {
     }
     // Name, Bio and FamID:
     public Member ( String iName, String iBiography, long famID ){
-        this.name = iName;
-        this.bDay = 1;
-        this.bMonth = 1;
-        this.bYear = 1;
-        this.biography = iBiography;
-        memberID = 
-        familyID = famID;
-        parentOne = null;
-        parentTwo = null;
-        children = new ArrayList<Member>();
-        spouse = null;
+        this(newID(), famID, iName, iBiography, 1, 1, 1, null ,null, null);
 
     }
     // Used for adding a new child to an existing member

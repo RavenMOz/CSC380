@@ -14,7 +14,7 @@ public class Case1 {
 		SQLCommands.activeFamilies.add(fam);
 		
 		//USER ADDS NEW ROOT MEMBER
-		Member root = new Member("Son Goku", "The World's Strongest", fID);
+		Member root = new Member("Son Goku", "The Worlds Strongest", fID);
 		
 		//USER CREATES A SPOUSE FOR ROOT MEMBER
 		Member spouse = new Member(root); root.setSpouse(spouse);
