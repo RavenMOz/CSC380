@@ -40,9 +40,9 @@ public class Member {
     // Empty:
     public Member(){
         this.name = null;
-        this.bDay = 0;
-        this.bMonth = 0;
-        this.bYear = 0;
+        this.bDay = 1;
+        this.bMonth = 1;
+        this.bYear = 1;
         this.biography = null;
         this.parentOne = null;
         this.parentTwo = null;
@@ -57,9 +57,9 @@ public class Member {
     public Member( String iName ){
         this.name = iName;
         this.biography = null;
-        this.bDay = 0;
-        this.bMonth = 0;
-        this.bYear = 0;
+        this.bDay = 1;
+        this.bMonth = 1;
+        this.bYear = 1;
         this.parentOne = null;
         this.parentTwo = null;
         this.children = null;
@@ -72,9 +72,9 @@ public class Member {
     public Member ( String iName, String iBio ){
         this.name = iName;
         this.biography = iBio;
-        this.bDay = 0;
-        this.bMonth = 0;
-        this.bYear = 0;
+        this.bDay = 1;
+        this.bMonth = 1;
+        this.bYear = 1;
         this.parentOne = null;
         this.parentTwo = null;
         this.children = null;
@@ -86,23 +86,27 @@ public class Member {
     // Name, Bio and FamID:
     public Member ( String iName, String iBiography, long famID ){
         this.name = iName;
-        this.bDay = 0;
-        this.bMonth = 0;
-        this.bYear = 0;
+        this.bDay = 1;
+        this.bMonth = 1;
+        this.bYear = 1;
         this.biography = iBiography;
         memberID = 
         familyID = famID;
         parentOne = null;
         parentTwo = null;
-        children = null;
+        children = new ArrayList<Member>();
         spouse = null;
 
     }
     // Used for adding a new child to an existing member
     public Member(Member p1, Member p2) {
-    	this(newID(), p1.getFamilyID(), "", "", 0, 0, 0, p1.getMemberID(), p2.getMemberID(), 0);
+    	this(newID(), p1.getFamilyID(), "", "", 1, 1, 1, p1, p2, null);
     }
-    // The Weird One:
+    // Used for adding a new spouse to an existing member
+    public Member(Member sps) {
+    	this(newID(), sps.getFamilyID(), "", "", 1, 1, 1, null, null, sps);
+    }
+    // Retrieve a full member from database constructor
     public Member(long mID, long famID, String name2, String bio, int bDay2, int bMonth2, int bYear2, long p1,
                   long p2, long sps) {
         this.name = name2;
@@ -118,7 +122,27 @@ public class Member {
 		spouse = SQLCommands.getMemberByID(sps);
 		children = SQLCommands.getChildrenByParentID(memberID);
 
-     
+    }
+    
+ // Write a full member from dynamic
+    public Member(long mID, long famID, String name2, String bio, int bDay2, int bMonth2, int bYear2, Member p1,
+                  Member p2, Member sps) {
+        this.name = name2;
+        this.bDay = bDay2;
+        this.bMonth = bMonth2;
+        this.bYear = bYear2;
+        this.biography = bio;
+        familyID = famID;
+        memberID = mID;
+		parentOne = p1;
+		parentTwo = p2;
+		spouse = sps;
+		children = SQLCommands.getChildrenByParentID(memberID);
+
+		for (Family f : SQLCommands.activeFamilies) {
+			if (f.getFamilyID() == famID) f.addMember(this);
+		}
+		
     }
 
     /* The Methods of this class are the following:
@@ -186,7 +210,14 @@ public class Member {
     public boolean hasChildren(){ return children != null; } // NEW!
 
     //toString:
-    public String toString(){ return "ID: "+memberID+" | Name: "+name+" | Bio: "+biography; }
+    public String toString(){ 
+    	String s = "MemberID: "+memberID+ " | FamilyID: "+familyID+" | Name: "+name+" | Bio: "+biography;
+    	if (spouse != null) s += " | Spouse: " + spouse.getName();
+    	if (parentOne != null) s += " | Parent 1: " + parentOne.getName();
+    	if (parentTwo != null) s += " | Parent 2: " + parentTwo.getName();
+    	for (Member m : children) { s += " | Child: " + m.getName(); } 
+    	return s;
+    }
     
     // Utility
     private static long newID() { return System.currentTimeMillis() + (long)(Math.random() * 100); }

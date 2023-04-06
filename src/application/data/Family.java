@@ -26,6 +26,7 @@ public class Family {
      */
     // Get:
     public Member getMember( int index ){ return familyMembers.get(index); }
+    public ArrayList<Member> getMembers() {return familyMembers;}
     public Member getRootMember(){ return this.root; }
     public int getSize(){ return familyMembers.size(); }
     public Member getMember( Member targetMember ){
