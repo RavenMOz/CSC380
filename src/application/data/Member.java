@@ -84,17 +84,23 @@ public class Member {
         this.memberID = newID();
     }
     // Name, Bio and FamID:
-    public Member ( String iName, String iBiography, long famID ){
-        this(newID(), famID, iName, iBiography, 1, 1, 1, null ,null, null);
+    public Member ( String iName, String iBiography, Family fam ){
+        this(newID(), fam.getFamilyID(), iName, iBiography, 1, 1, 1, null ,null, null);
+        fam.addMember(this);
 
     }
     // Used for adding a new child to an existing member
-    public Member(Member p1, Member p2) {
-    	this(newID(), p1.getFamilyID(), "", "", 1, 1, 1, p1, p2, null);
+    public Member(String name, String bio, Member p1, Member p2, Family fam) {
+    	this(newID(), fam.getFamilyID(), name, bio, 1, 1, 1, p1, p2, null);
+    	p1.addChild(this);
+    	p2.addChild(this);
+    	fam.addMember(this);
     }
     // Used for adding a new spouse to an existing member
-    public Member(Member sps) {
-    	this(newID(), sps.getFamilyID(), "", "", 1, 1, 1, null, null, sps);
+    public Member(String name, String bio, Member sps, Family fam) {
+    	this(newID(), sps.getFamilyID(), name, bio, 1, 1, 1, null, null, sps);
+    	sps.setSpouse(this);
+    	fam.addMember(this);
     }
     // Retrieve a full member from database constructor
     public Member(long mID, long famID, String name2, String bio, int bDay2, int bMonth2, int bYear2, long p1,
@@ -176,7 +182,7 @@ public class Member {
     public void setBDay( int newBirthDay ){ this.bDay = newBirthDay; }
     public void setBMonth( int newBirthMonth ){ this.bMonth = newBirthMonth; }
     public void setBYear( int newBirthYear ){ this.bYear = newBirthYear; }
-    public void setSpouse( Member newSpouse ){ this.spouse = newSpouse; }
+    public void setSpouse( Member newSpouse ){ this.spouse = newSpouse; newSpouse.spouse = this; }
 
     //Add:
     public void addChild( Member iChild ){ this.children.add(childCount,iChild); childCount++; } // NEW!

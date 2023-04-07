@@ -25,6 +25,12 @@ public class Family {
      *      Clear = Clears an Array.
      */
     // Get:
+    public Member getMember(String name) {
+    	for (Member m : familyMembers) {
+			if (m.getName().contains(name)) return m;
+		}
+    	return null;
+    }
     public Member getMember( int index ){ return familyMembers.get(index); }
     public ArrayList<Member> getMembers() {return familyMembers;}
     public Member getRootMember(){ return this.root; }
