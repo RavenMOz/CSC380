@@ -26,7 +26,6 @@ public class SQLCommands {
 		return constructMember(query);
 		
 	}
-	
 	private static Member constructMember(String query) {
 		
 		try {
@@ -36,7 +35,6 @@ public class SQLCommands {
 		}
 		
 	}
-	
 	private static ArrayList<Member> constructMembers(String query) {
 		
 		try {
@@ -83,7 +81,6 @@ public class SQLCommands {
 		
 		
 	}
-
 	public static ArrayList<Member> getMembersByFamID(long famID) {
 		
 		String query = "select * from Members where familyID = " + famID;
@@ -91,7 +88,6 @@ public class SQLCommands {
 		return constructMembers(query);
 		
 	}
-
 	public static ArrayList<Member> getChildrenByParentID(long parentID) {
 		
 		String query = "select * from Children where poneID = " + parentID + " or ptwoID = " + parentID;
@@ -99,7 +95,6 @@ public class SQLCommands {
 		return constructMembers(query);
 
 	}
-
 	public static void writeFamily(Family fam) {
 		
 		for (Member m : fam.getMembers()) {
@@ -108,9 +103,7 @@ public class SQLCommands {
 		}
 		
 	}
-	
 	public static Family readFamily(long fID) { return new Family(fID); }
-	
 	private static void updateMember(Member m) {
 		
 		LocalDate d = LocalDate.of(m.getBYear(), m.getBMonth(), m.getBDay());
@@ -129,7 +122,6 @@ public class SQLCommands {
 		
 		send(query);
 	}
-
 	static void writeMember(Member m) {
 		
 		long mid = m.getMemberID();
@@ -152,7 +144,6 @@ public class SQLCommands {
 		send(query);
 		
 	}
-	
 	private static void send(String query) {
 		
 		try {
@@ -171,12 +162,10 @@ public class SQLCommands {
 		}
 		
 	}
-	
 	public static boolean isWritten(Member m) {
 		if (getMemberByID(m.getMemberID()) != null) return true;
 		else return false;
 	}
-	
 	public static boolean isWritten(Family f) {
 		if (getMembersByFamID(f.getFamilyID()).size() == f.getSize()) return true;
 		else return false;
