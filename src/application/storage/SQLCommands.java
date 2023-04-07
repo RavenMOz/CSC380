@@ -176,4 +176,9 @@ public class SQLCommands {
 		if (getMemberByID(m.getMemberID()) != null) return true;
 		else return false;
 	}
+	
+	public static boolean isWritten(Family f) {
+		if (getMembersByFamID(f.getFamilyID()).size() == f.getSize()) return true;
+		else return false;
+	}
 }
