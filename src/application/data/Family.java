@@ -57,4 +57,12 @@ public class Family {
 	public long getFamilyID() {
 		return familyID;
 	}
+	
+	public String toString() {
+		String s = "Family ID: " + familyID;
+//		for (Member m : familyMembers) {
+//			s += "\n" + m;
+//		}
+		return s;
+	}
 }
