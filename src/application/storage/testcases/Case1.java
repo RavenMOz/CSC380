@@ -8,6 +8,14 @@ public class Case1 {
 
 	public static void main(String[] args) {
 		
+		/*
+		 * This test case simulates the creation of a new family, along with the addition of
+		 * a root member, and a spouse and child. These members are contained within a 
+		 * family object, and then written to the MySQL database. A new family will be
+		 * created with new members on every run.
+		 * 
+		 */
+		
 		//USER CREATES A NEW FAMILY
 		Family fam = new Family();
 		long fID = fam.getFamilyID();
@@ -35,6 +43,12 @@ public class Case1 {
 		System.out.println(child1);
 		
 		SQLCommands.writeFamily(fam);
+		
+		System.out.println(fam);
+		
+//		fam = new Family(fID);
+		
+		System.out.println(fam);
 		
 	}
 	
