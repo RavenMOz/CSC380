@@ -63,9 +63,9 @@ public class SQLCommands {
 					if (i==3) name = famdata;
 					if (i==4) bio = famdata;
 					if (i==5) bDate = Date.valueOf(famdata).toLocalDate();
-					if (i==6) spouse = Integer.parseInt(famdata);
-					if (i==7) p1 = Integer.parseInt(famdata);
-					if (i==8) p2 = Integer.parseInt(famdata);
+					if (i==6) spouse = Long.parseLong(famdata);
+					if (i==7) p1 = Long.parseLong(famdata);
+					if (i==8) p2 = Long.parseLong(famdata);
 					
 				}
 				
@@ -108,6 +108,8 @@ public class SQLCommands {
 		}
 		
 	}
+	
+	public static Family readFamily(long fID) { return new Family(fID); }
 	
 	private static void updateMember(Member m) {
 		
