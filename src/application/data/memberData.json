@@ -1,0 +1,14 @@
+{
+  "name": "John Marston",
+  "biography": "Couldn't hit the broad side of a barn!",
+  "birthDay": 1,
+  "birthMonth": 1,
+  "birthYear": 1873,
+  "parentOne": [{ "name": "Scott Marston", ..,}],
+  "parentTwo": [{ "name": "Ms. Marston", .., }],
+  "spouse": [{ "name": "Abigail Marston", .., }],
+  "childCount": 1,
+  "children": [{ "name": "Jack Marston", .., }],
+  "memberID": 0000000001
+  "familyID": 0000000001
+}
