@@ -17,7 +17,7 @@
     {
        ...
     },
-  ],
+  }],
   "root": {  
       "name": "John Marston",
       "biography": "Couldn't hit the broad side of a barn!",
