@@ -8,16 +8,21 @@ public class Family {
     /* Variables:
      */
     ArrayList<Member> familyMembers;
-    Member root;
     private final long familyID;
+    private final long ownerID;
     /* Constructor:
      */
-    public Family(){ this.familyMembers = new ArrayList<>(); this.root = null; this.familyID = System.currentTimeMillis() + (long)(Math.random() * 100);}
-    public Family(long famID){ 
+    public Family(){ this.familyMembers = new ArrayList<>(); this.familyID = System.currentTimeMillis() + (long)(Math.random() * 100); this.ownerID = getOwnerID(); }
+    
+	public Family(long famID){ 
     	this.familyMembers = SQLCommands.getMembersByFamID(famID);
     	familyID = famID;
-    	this.root = null;
+    	this.ownerID = SQLCommands.getOwnerID(famID);
     }
+	
+	public long getOwnerID() {
+		return this.ownerID;
+	}
     /* Methods:
      *      Get = Fetches variable following the get section of the method's title.
      *      Add = adds a value to a given variable.
@@ -33,7 +38,6 @@ public class Family {
     }
     public Member getMember( int index ){ return familyMembers.get(index); }
     public ArrayList<Member> getMembers() {return familyMembers;}
-    public Member getRootMember(){ return this.root; }
     public int getSize(){ return familyMembers.size(); }
     public Member getMember( Member targetMember ){
         if ( familyMembers.contains(targetMember)){
@@ -48,9 +52,6 @@ public class Family {
     // Add:
     public void addMember( Member newMember ){
         familyMembers.add(newMember);
-        if (familyMembers.size() == 1 ){
-            this.root = newMember;
-        }
     }
     // Remove:
     public void removeMember( Member targetMember ){

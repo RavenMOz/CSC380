@@ -92,8 +92,8 @@ public class Member {
     // Used for adding a new child to an existing member
     public Member(String name, String bio, Member p1, Member p2, Family fam) {
     	this(newID(), fam.getFamilyID(), name, bio, 1, 1, 1, p1, p2, null);
-    	p1.addChild(this);
-    	p2.addChild(this);
+    	if (p1 != null) p1.addChild(this);
+    	if (p2 != null) p2.addChild(this);
     	fam.addMember(this);
     }
     // Used for adding a new spouse to an existing member
@@ -113,9 +113,9 @@ public class Member {
         familyID = famID;
         memberID = mID;
         
-		parentOne = SQLCommands.getMemberByID(p1);
-		parentTwo = SQLCommands.getMemberByID(p2);
-		spouse = SQLCommands.getMemberByID(sps);
+		if (p1 != 0) parentOne = SQLCommands.getMemberByID(p1);
+		if (p2 != 0) parentTwo = SQLCommands.getMemberByID(p2);
+//		if (sps != 0)spouse = SQLCommands.getMemberByID(sps);
 		children = SQLCommands.getChildrenByParentID(memberID);
 
     }
