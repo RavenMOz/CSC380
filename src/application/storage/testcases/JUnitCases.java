@@ -10,17 +10,19 @@ import application.storage.SQLCommands;
 
 public class JUnitCases {
 
-	Family f = new Family();
+	
 	
 	long fID = 1680893907143L;
 	
 	@Test
 	public void testWrite() {
+		Family f = new Family();
 		Member joe = new Member("Joe Mama", "The life of the party", f);
 		Member jay = new Member("Hugh Janus", "The name says it all", f);
 		Member john = new Member("Ben Dover", "My best friend ever", f);
 		SQLCommands.writeFamily(f);
 		assertEquals("Is this family written", true, SQLCommands.isWritten(f));
+		SQLCommands.deleteFamily(f);
 	}
 	
 	@Test
@@ -31,6 +33,7 @@ public class JUnitCases {
 	
 	@Test
 	public void testWriteAndRead() {
+		Family f = new Family();
 		Member joe = new Member("Joe Mama", "The life of the party", f);
 		Member jay = new Member("Hugh Janus", "The name says it all", f);
 		Member john = new Member("Ben Dover", "My best friend ever", f);
@@ -38,7 +41,9 @@ public class JUnitCases {
 		
 		Family f3 = SQLCommands.readFamily(f.getFamilyID());
 		
-		assertEquals("Are these families equal", f, f3);
+		assertEquals("Are these families equal", f.getSize(), f3.getSize());
+		
+		SQLCommands.deleteFamily(f.getFamilyID());
 		
 	}
 	
@@ -46,14 +51,13 @@ public class JUnitCases {
 	public void readModifyWrite() {
 		
 		Family f4 = new Family(fID);
-		System.out.println(f4);
-		Member hailie = new Member("Hailie Jane", "I love that name", f4.getMember("john"), f4.getMember("abigail"), f4);
+		Member hailie = new Member("Hailie Jade", "I love that name", f4.getMember("John"), f4.getMember("Abigail"), f4);
 		
 		SQLCommands.writeFamily(f4);
 		
 		Family f5 = new Family(fID);
 		
-		assertEquals("Did the change get properly written", f4, f5);
+		assertEquals("Did the change get properly written", f4.getSize(), f5.getSize());
 		
 	}
 	

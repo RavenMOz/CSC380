@@ -18,6 +18,7 @@ public class SQLCommands {
 	static final String url = "jdbc:mysql://localhost:3306/familytree";
 	static final String uname = "testuser";
 	static final String pwd = "123";
+	static Connection con = getConnection(); 
 	static public ArrayList<Family> activeFamilies = new ArrayList<>();
 	
 	public static Member getMemberByID(long memberID) {
@@ -26,11 +27,21 @@ public class SQLCommands {
 		return constructMember(query);
 		
 	}
+	private static Connection getConnection() {
+		Connection con = null;
+		try {
+			con = DriverManager.getConnection(url, uname, pwd);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return con;
+	}
 	private static Member constructMember(String query) {
 		
 		try {
 			return constructMembers(query).get(0);
-		} catch (IndexOutOfBoundsException e) {
+		} catch (Exception e) {
 			return null;
 		}
 		
@@ -39,7 +50,7 @@ public class SQLCommands {
 		
 		try {
 			ArrayList<Member> mems = new ArrayList<>();
-			Connection con = DriverManager.getConnection(url, uname, pwd);
+			
 			Statement statement = con.createStatement();
 			ResultSet result = statement.executeQuery(query);
 			
@@ -102,6 +113,11 @@ public class SQLCommands {
 			else writeMember(m);
 		}
 		
+		if (!isWritten(fam)) {
+			String query = "insert into Families values ( " + fam.getFamilyID() + ", " + fam.getOwnerID() + ")";
+			send(query);
+		}
+		
 	}
 	public static Family readFamily(long fID) { return new Family(fID); }
 	private static void updateMember(Member m) {
@@ -110,7 +126,7 @@ public class SQLCommands {
 		Date date = Date.valueOf(d);
 		
 		String query = "UPDATE Members SET"
-				+ ", name = '" + m.getName()
+				+ " name = '" + m.getName()
 				+ "', bio = '" + m.getBio()
 				+ "', bDate = '" + new SimpleDateFormat("yyyy-MM-dd").format(date) + "'";
 		
@@ -121,6 +137,8 @@ public class SQLCommands {
 		query += " WHERE memberID = " + m.getMemberID() + "";
 		
 		send(query);
+		
+		rewriteChildren(m);
 	}
 	static void writeMember(Member m) {
 		
@@ -143,6 +161,35 @@ public class SQLCommands {
 				"', " + spouse + ", " + pone + ", " + ptwo + ");";
 		send(query);
 		
+		rewriteChildren(m);
+		
+	}
+	private static void rewriteChildren(Member m) {
+		
+		if (m.getChildren() == null) return;
+		if (m.getChildren().size() == 0) {
+			clearChildren(m); return;
+		}
+		
+		clearChildren(m);
+		
+		for (Member c : m.getChildren()) {
+			long cid = c.getMemberID();
+			long p1id = 0;
+			long p2id = 0;
+			
+			if (c.getParentOne() != null) p1id = c.getParentOne().getMemberID();
+			if (c.getParentTwo() != null) p2id = c.getParentTwo().getMemberID();
+			
+			String query = "INSERT INTO Children VALUES (" + cid + ", " + p1id + ", " + p2id + ")";
+			send(query);
+		}
+	}
+	private static void clearChildren(Member m) {
+		String query = "delete from Children where poneID = " + m.getMemberID();
+		send(query);
+		query = "delete from Children where ptwoID = " + m.getMemberID();
+		send(query);
 	}
 	private static void send(String query) {
 		
@@ -166,8 +213,49 @@ public class SQLCommands {
 		if (getMemberByID(m.getMemberID()) != null) return true;
 		else return false;
 	}
+	private static ArrayList<Member> getChildren(Member m) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	public static boolean isWritten(Family f) {
 		if (getMembersByFamID(f.getFamilyID()).size() == f.getSize()) return true;
 		else return false;
+	}
+	public static long getOwnerID(long famID) {
+		long id = 0;
+		String query = "select * from families where familyID = " + famID;
+		
+		Statement statement;
+		try {
+			statement = con.createStatement();
+			ResultSet result = statement.executeQuery(query);
+			
+			while (result.next()) {
+				String data = "";
+				data = result.getString(1);
+				id = Long.parseLong(data);
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+		return id;
+		
+	}
+	public static void deleteFamily(long familyID) {
+		String query = "delete from Members where familyID = " + familyID;
+		send(query);
+		query = "delete from Families where familyID = " + familyID;
+		send(query);
+		query = "delete from Children where familyID = " + familyID;
+	}
+	public static void deleteFamily(Family fam) {
+		long familyID = fam.getFamilyID();
+		String query = "delete from Members where familyID = " + familyID;
+		send(query);
+		query = "delete from Families where familyID = " + familyID;
+		send(query);
+		query = "delete from Children where familyID = " + familyID;
 	}
 }
