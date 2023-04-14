@@ -59,6 +59,8 @@ public class JUnitCases {
 		
 		assertEquals("Did the change get properly written", f4.getSize(), f5.getSize());
 		
+		SQLCommands.deleteMember(hailie.getMemberID());
+		
 	}
 	
 }
