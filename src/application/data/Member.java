@@ -2,107 +2,50 @@ package application.data;
 
 import java.util.ArrayList;
 
-import application.storage.SQLCommands;
-
 public class Member {
-    /* Updated Changes:
-     *      o Created series of Has methods.
-     *          I   hasSpouse()
-     *          II  hasChildren()
-     *          III hasParent()
-     *      o Wrote the clearChildren() method.
-     *      o Reintroduced the parent methods and variables.
-     *      o Removed the mother and father variables and their associated methods.
-     *      o Created two more Constructors, one with a given Name and one with the given Name AND Biography.
-     *      o Created a childCount variable.
-     *      o Applied Sam's Changes:
-     *          - Family ID & Member ID
-                - toString()
-     */
+	
     // Variables:
-    String name;
-    String biography;
-    int bDay; int bMonth; int bYear;
-    ArrayList<Member> children;
-    int childCount;
-    Member parentOne; Member parentTwo;
-    Member spouse;
+    String name, biography;
+    int bDay, bMonth, bYear;
+    ArrayList<Member> children = new ArrayList<>();
+    Member parentOne, parentTwo, spouse;
     public final long memberID;
     public final long familyID;
-
-    /* Constructors:
-     *      Emtpy
-     *      Name
-     *      Name & Bio
-     *      Name, Bio & FamID
-     *      The Weird One...
-     */
-    // Empty:
-    public Member(){
-        this.name = null;
-        this.bDay = 1;
-        this.bMonth = 1;
-        this.bYear = 1;
-        this.biography = null;
-        this.parentOne = null;
-        this.parentTwo = null;
-        this.children = null;
-        this.childCount = 0;
-        this.spouse = null;
-        this.familyID = 0;
-        this.memberID = newID();
-
-    }
-    // Name:
-    public Member( String iName ){
-        this.name = iName;
-        this.biography = null;
-        this.bDay = 1;
-        this.bMonth = 1;
-        this.bYear = 1;
-        this.parentOne = null;
-        this.parentTwo = null;
-        this.children = null;
-        this.childCount = 0;
-        this.spouse = null;
-        this.familyID = 0;
-        this.memberID = newID();
-    }
-    // Name & Biography:
-    public Member ( String iName, String iBio ){
-        this.name = iName;
-        this.biography = iBio;
-        this.bDay = 1;
-        this.bMonth = 1;
-        this.bYear = 1;
-        this.parentOne = null;
-        this.parentTwo = null;
-        this.children = null;
-        this.childCount = 0;
-        this.spouse = null;
-        this.familyID = 0;
-        this.memberID = newID();
-    }
-    // Name, Bio and FamID:
-    public Member ( String iName, String iBiography, Family fam ){
+    
+/////////////////////////////////////////////////////////////////////////
+// These constructors used for creating new dynamic members with no relations.
+/////////////////////////////////////////////////////////////////////////
+    
+    public Member( Family f ){ this("", "", f); }
+    public Member( String iName, Family f ){ this (iName, "", f); }
+    public Member( String iName, String iBiography, Family fam ) {
         this(newID(), fam.getFamilyID(), iName, iBiography, 1, 1, 1, null ,null, null);
         fam.addMember(this);
-
     }
-    // Used for adding a new child to an existing member
+    
+/////////////////////////////////////////////////////////////////////////
+// These constructors used for creating new dynamic members rooted to other dynamic members.
+/////////////////////////////////////////////////////////////////////////
+    
+    // Creates a child with specified dynamic parents.
     public Member(String name, String bio, Member p1, Member p2, Family fam) {
     	this(newID(), fam.getFamilyID(), name, bio, 1, 1, 1, p1, p2, null);
     	if (p1 != null) p1.addChild(this);
     	if (p2 != null) p2.addChild(this);
     	fam.addMember(this);
     }
-    // Used for adding a new spouse to an existing member
+    // Creates a spouse for the specified dynamic member.
     public Member(String name, String bio, Member sps, Family fam) {
     	this(newID(), sps.getFamilyID(), name, bio, 1, 1, 1, null, null, sps);
     	sps.setSpouse(this);
     	fam.addMember(this);
     }
-    // Retrieve a full member from database constructor
+    
+/////////////////////////////////////////////////////////////////////////
+// These constructors build full members with all parameters
+/////////////////////////////////////////////////////////////////////////  
+    
+    //New dynamic member from relation IDs
     public Member(long mID, long famID, String name2, String bio, int bDay2, int bMonth2, int bYear2, long p1,
                   long p2, long sps) {
         this.name = name2;
@@ -112,15 +55,10 @@ public class Member {
         this.biography = bio;
         familyID = famID;
         memberID = mID;
-        
-		if (p1 != 0) parentOne = SQLCommands.getMemberByID(p1);
-		if (p2 != 0) parentTwo = SQLCommands.getMemberByID(p2);
-//		if (sps != 0)spouse = SQLCommands.getMemberByID(sps);
-		children = SQLCommands.getChildrenByParentID(memberID);
-
+	
     }
     
- // Write a full member from dynamic
+    //New dynamic member from other dynamic members
     public Member(long mID, long famID, String name2, String bio, int bDay2, int bMonth2, int bYear2, Member p1,
                   Member p2, Member sps) {
         this.name = name2;
@@ -128,28 +66,26 @@ public class Member {
         this.bMonth = bMonth2;
         this.bYear = bYear2;
         this.biography = bio;
+        
         familyID = famID;
         memberID = mID;
 		parentOne = p1;
 		parentTwo = p2;
 		spouse = sps;
-		children = SQLCommands.getChildrenByParentID(memberID);
-
-		for (Family f : SQLCommands.activeFamilies) {
-			if (f.getFamilyID() == famID) f.addMember(this);
-		}
 		
     }
 
     /* The Methods of this class are the following:
+     * 
      *      Get = Fetches variable following the get section of the method's title.
      *      Set = Replaces a variable with a given input.
      *      Add = adds a value to a given variable.
      *      Remove = Removes (nulls?) a value from a variable.
      *      Clear = Clears an array.
      *      Has = Boolean methods that checks if a variable is filled in or not. [ NEW! ]
-     *      toString = Prints a String.
-    */
+     *      Utility = Functions which are used by other functions.
+     */
+    
     // Get:
     public String getName(){ if ( name == null ) return "EMPTY"; else return this.name; }
     public String getBio(){ if ( biography == null ) return "EMPTY"; else return this.biography; }
@@ -183,29 +119,34 @@ public class Member {
     public void setBMonth( int newBirthMonth ){ this.bMonth = newBirthMonth; }
     public void setBYear( int newBirthYear ){ this.bYear = newBirthYear; }
     public void setSpouse( Member newSpouse ){ this.spouse = newSpouse; newSpouse.spouse = this; }
-
+    public void setChildren( ArrayList<Member> newChildren ) { children = newChildren; }
+    
     //Add:
-    public void addChild( Member iChild ){ this.children.add(childCount,iChild); childCount++; } // NEW!
+    public void addChild( Member iChild ){ this.children.add(iChild); }
     public void addParent( Member newParent ){
         if ( parentOne == null ){ this.parentOne = newParent; }
         else if ( parentTwo == null ){ this.parentTwo = newParent; }
-    } // NEW!
+    }
 
     //Remove:
-    public void removeChild( Member iChild ){ children.remove(iChild); } // NEW!
-    public void removeParent( Member iParent ){ if ( parentOne == iParent ){ parentOne = null; } else if ( parentTwo == iParent ) { parentTwo = null; } } // NEW!
+    public void removeChild( Member iChild ){ children.remove(iChild); }
+    public void removeParent( Member iParent ) { 
+    	if ( parentOne == iParent ) parentOne = null;
+    	else if ( parentTwo == iParent ) parentTwo = null; 
+    }
 
     //Clear:
-    public void clearChildren(){ this.children.removeAll(children); childCount = 0; } // NEW!
+    public void clearChildren(){ this.children.clear(); }
 
     //Has:
-    public boolean hasParent(){ if ( parentOne != null ) { return true; } else return parentTwo != null; } // NEW!
-    public boolean hasParentOne() { return parentOne != null; } // NEW!
-    public boolean hasParentTwo() { return parentTwo != null; } // NEW!
-    public boolean hasSpouse(){ return spouse != null; } // NEW!
-    public boolean hasChildren(){ return children != null; } // NEW!
-
-    //toString:
+    public boolean hasParent(){ return (parentOne != null || parentTwo != null); }
+    public boolean hasParentOne() { return parentOne != null; }
+    public boolean hasParentTwo() { return parentTwo != null; }
+    public boolean hasSpouse(){ return spouse != null; }
+    public boolean hasChildren(){ return children.size() > 0; }
+    
+    // Utility
+    private static long newID() { return System.currentTimeMillis() + (long)(Math.random() * 100); }
     public String toString(){ 
     	String s = "MemberID: "+memberID+ " | FamilyID: "+familyID+" | Name: "+name+" | Bio: "+biography;
     	if (spouse != null) s += " | Spouse: " + spouse.getName();
@@ -214,8 +155,7 @@ public class Member {
     	for (Member m : children) { s += " | Child: " + m.getName(); } 
     	return s;
     }
+	public void setParentOne(Member pone) { parentOne = pone; }
+	public void setParentTwo(Member ptwo) { parentTwo = ptwo; }
     
-    // Utility
-    private static long newID() { return System.currentTimeMillis() + (long)(Math.random() * 100); }
-  
 }

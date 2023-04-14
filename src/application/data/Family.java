@@ -18,6 +18,7 @@ public class Family {
     	this.familyMembers = SQLCommands.getMembersByFamID(famID);
     	familyID = famID;
     	this.ownerID = SQLCommands.getOwnerID(famID);
+    	SQLCommands.setRelations(this);
     }
 	
 	public long getOwnerID() {
@@ -37,6 +38,13 @@ public class Family {
     	return null;
     }
     public Member getMember( int index ){ return familyMembers.get(index); }
+    public Member getMember(long mID){
+    	if (mID == 0) return null;
+    	for (Member m : getMembers()) {
+    		if (m.getMemberID() == mID) return m;
+    	}
+    	return null;
+    }
     public ArrayList<Member> getMembers() {return familyMembers;}
     public int getSize(){ return familyMembers.size(); }
     public Member getMember( Member targetMember ){
