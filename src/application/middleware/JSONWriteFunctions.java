@@ -16,22 +16,23 @@ import application.storage.SQLCommands;
 
 public class JSONWriteFunctions {
 	
-	public final static String mainDirectory = "/home/FamilyTree/files/userData/";
-	public final static String testDirectory = "C:\\Users\\samth\\OneDrive\\Desktop\\Files & Zips\\Programming\\380\\JsonTest";
-	public final static String sep = System.getProperty("file.separator");
-	public final static long testUID = 694201337;
+	public static String mainDirectory = "/home/FamilyTree/files/userData/";
+	public static String sep = System.getProperty("file.separator");
+	public static long testUID = 694201337;
 
 	public static void main(String[] args) {
-		createUserData(testUID);
+		createTestData();
 	}
-	
+	private static void createTestData() {
+		mainDirectory = "C:\\Users\\samth\\OneDrive\\Desktop\\Files & Zips\\Programming\\380\\JsonTest";
+		createUserData(testUID);
+		mainDirectory = "/home/FamilyTree/files/userData/";
+	}
 	public static void createUserData(long userID) {
 		
 		if (userID == 0) return;
 		
-		String dir;
-		if (sep.contains("/")) { dir = mainDirectory; }
-		else { dir = testDirectory; }
+		String dir = mainDirectory;
 		
 		dir = dir + sep + userID + sep;
 		
