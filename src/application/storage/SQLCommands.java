@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import application.data.Family;
 import application.data.Member;
@@ -19,7 +20,6 @@ public class SQLCommands {
 	static final String uname = "testuser";
 	static final String pwd = "123";
 	static Connection con = getConnection(); 
-	static public ArrayList<Family> activeFamilies = new ArrayList<>();
 	
 	public static Member getMemberByID(long memberID) {
 				
@@ -27,6 +27,9 @@ public class SQLCommands {
 		return constructMember(query);
 		
 	}
+//	public static Member constructSpouse(Member m) {
+//		
+//	}
 	private static Connection getConnection() {
 		Connection con = null;
 		try {
@@ -69,8 +72,8 @@ public class SQLCommands {
 					famdata = result.getString(i);
 					if (i==1) mID = Long.parseLong(famdata);
 					if (i==2) fID = Long.parseLong(famdata);
-					if (i==3) name = famdata;
-					if (i==4) bio = famdata;
+					if (i==3) name = famdata/*.replace("''", "'")*/;
+					if (i==4) bio = famdata/*.replace("''", "'")*/;
 					if (i==5) bDate = Date.valueOf(famdata).toLocalDate();
 					if (i==6) spouse = Long.parseLong(famdata);
 					if (i==7) p1 = Long.parseLong(famdata);
@@ -213,17 +216,13 @@ public class SQLCommands {
 		if (getMemberByID(m.getMemberID()) != null) return true;
 		else return false;
 	}
-	private static ArrayList<Member> getChildren(Member m) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	public static boolean isWritten(Family f) {
 		if (getMembersByFamID(f.getFamilyID()).size() == f.getSize()) return true;
 		else return false;
 	}
 	public static long getOwnerID(long famID) {
 		long id = 0;
-		String query = "select * from families where familyID = " + famID;
+		String query = "select * from userFamilies where familyID = " + famID;
 		
 		Statement statement;
 		try {
@@ -257,5 +256,166 @@ public class SQLCommands {
 		query = "delete from Families where familyID = " + familyID;
 		send(query);
 		query = "delete from Children where familyID = " + familyID;
+	}
+	public static List<Family> getFamilies(long userID) {
+		
+		List<Family> fams = new ArrayList<>();
+		
+		for (long l : getFamIDsByUser(userID)) {
+			fams.add(readFamily(l));
+		}
+		
+		return fams;
+		
+	}
+	private static List<Long> getFamIDsByUser(long userID) {
+		
+		List<Long> famIDs = new ArrayList<>();
+		
+		String query = "select * from userFamilies where userID = " + userID;
+		
+		Statement statement;
+		
+		try {
+			statement = con.createStatement();
+			ResultSet result = statement.executeQuery(query);
+			
+			while (result.next()) {
+				String data = "";
+				data = result.getString(1);
+				famIDs.add(Long.parseLong(data));
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return new ArrayList<Long>();
+		}
+		return famIDs;
+	}
+	public static void setRelations(Family f) {
+		for (Member m : f.getMembers()) {
+			Member spouse = f.getMember(getSpouseID(m));
+			ArrayList<Member> children = getChildren(m, f);
+			if (spouse != null) m.setSpouse(spouse);
+			m.setChildren(children);
+			Member pone = f.getMember(getParentOneID(m));
+			Member ptwo = f.getMember(getParentTwoID(m));
+			if (pone != null) m.setParentOne(pone);
+			if (ptwo != null) m.setParentTwo(ptwo);
+		}
+	}
+	private static long getParentTwoID(Member child) {
+		
+		String query = "select ptwoID from children where familyID = " + 
+				child.getFamilyID() + " and memberID = " + child.getMemberID();
+		
+		long id = 0;
+		
+		Statement statement;
+		
+		try {
+			statement = con.createStatement();
+			ResultSet result = statement.executeQuery(query);
+			
+			while (result.next()) {
+				String data = "";
+				data = result.getString(1);
+				id = Long.parseLong(data);
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+		return id;
+	}
+	private static long getParentOneID(Member child) {
+		
+		String query = "select poneID from children where familyID = " + 
+				child.getFamilyID() + " and memberID = " + child.getMemberID();
+		
+		long id = 0;
+		
+		Statement statement;
+		
+		try {
+			statement = con.createStatement();
+			ResultSet result = statement.executeQuery(query);
+			
+			while (result.next()) {
+				String data = "";
+				data = result.getString(1);
+				id = Long.parseLong(data);
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+		return id;
+	}
+	private static ArrayList<Member> getChildren(Member m, Family f) {
+		
+		String query = "select memberID from children where poneID = " + m.getMemberID() + 
+					   " or ptwoID = " + m.getMemberID();
+		
+		Statement statement;
+		ArrayList<Member> children = new ArrayList<>();
+		
+		try {
+			statement = con.createStatement();
+			ResultSet result = statement.executeQuery(query);
+			
+			while (result.next()) {
+				String data = "";
+				data = result.getString(1);
+				children.add(f.getMember(Long.parseLong(data)));
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return new ArrayList<Member>();
+		}
+		
+		return children;
+	}
+//	private static boolean hasChildren(Member m) {
+//		String query = "select from children where poneID = " + m.getMemberID() + 
+//					   " or ptwoID = " + m.getMemberID();
+//		Statement statement; int ccount = 0;
+//		try {
+//			statement = con.createStatement();
+//			ResultSet result = statement.executeQuery(query);
+//			while (result.next()) {
+//				ccount++;
+//			} 
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+//		return (ccount > 0);
+//	}
+	private static long getSpouseID(Member otherSpouse) {
+		
+		String query = "select memberID from members where familyID = " + 
+		otherSpouse.getFamilyID() + " and spouse = " + otherSpouse.getMemberID();
+		
+		long id = 0;
+		
+		Statement statement;
+		
+		try {
+			statement = con.createStatement();
+			ResultSet result = statement.executeQuery(query);
+			
+			while (result.next()) {
+				String data = "";
+				data = result.getString(1);
+				id = Long.parseLong(data);
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+		
+		return id;
 	}
 }
