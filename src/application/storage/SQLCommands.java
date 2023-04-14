@@ -418,4 +418,8 @@ public class SQLCommands {
 		
 		return id;
 	}
+	public static void deleteMember(long memberID) {
+		String query = "delete from Members where memberID = " + memberID;
+		send(query);
+	}
 }
