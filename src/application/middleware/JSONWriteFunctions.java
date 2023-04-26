@@ -1,8 +1,13 @@
 package application.middleware;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,21 +25,13 @@ public class JSONWriteFunctions {
 	public static String sep = System.getProperty("file.separator");
 	public static long testUID = 694201337;
 
-	public static void main(String[] args) {
-		createTestData();
-	}
-	private static void createTestData() {
-		mainDirectory = "C:\\Users\\samth\\OneDrive\\Desktop\\Files & Zips\\Programming\\380\\JsonTest";
-		createUserData(testUID);
-		mainDirectory = "/home/FamilyTree/files/userData/";
-	}
 	public static void createUserData(long userID) {
 		
 		if (userID == 0) return;
 		
 		String dir = mainDirectory;
 		
-		dir = dir + sep + userID + sep;
+		dir = dir + userID + sep;
 		
 		new File(dir).mkdirs();
 		
@@ -44,6 +41,89 @@ public class JSONWriteFunctions {
 		
 	}
 	
+	public static void dispose(long userID) {
+		File userStuff = new File(mainDirectory + userID + sep);
+		deleteDirectory(userStuff);
+	}
+	
+	static boolean deleteDirectory(File directoryToBeDeleted) {
+	    File[] allContents = directoryToBeDeleted.listFiles();
+	    if (allContents != null) {
+	        for (File file : allContents) {
+	            deleteDirectory(file);
+	        }
+	    }
+	    return directoryToBeDeleted.delete();
+	}
+	
+	public static void save(long userID) {
+		File folder = new File(mainDirectory + userID + sep).listFiles()[0];
+		long famID = Long.parseLong(folder.getName());
+		Family f = readFamily(userID, famID);
+		SQLCommands.writeFamily(f);
+	}
+	
+	private static Family readFamily(long userID, long famID) {
+		File dir = new File(mainDirectory + userID + sep + famID + sep);
+		ArrayList<Member> members = new ArrayList<>();
+		for (File f : dir.listFiles()) {
+			if (f != null) {
+				long mID = Long.parseLong(f.getName().substring(0,13));
+				
+				try {
+					String jsonString;
+					jsonString = getJsonAsString(f);
+					members.add(new Member(new JSONObject(jsonString), mID, famID));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		for (Member m : members) {
+			if (getSpouse(m, members) != null) m.setSpouse(getSpouse(m, members));
+			if (getP1(m, members) != null) m.setParentOne(getP1(m, members));
+			if (getP2(m, members) != null) m.setParentTwo(getP2(m, members));
+			m.setChildren(getChildren(m, members));
+		}
+		
+		return new Family(members, famID, userID);
+	}
+	private static String getJsonAsString(File f) throws IOException {
+		BufferedReader reader = new BufferedReader(new FileReader(f));
+		String json = "";
+		while (reader.ready()) {
+			json += reader.readLine();
+		}
+		reader.close();
+		return json;
+	}
+
+	private static ArrayList<Member> getChildren(Member m, ArrayList<Member> members) {
+		ArrayList<Member> childs = new ArrayList<>();
+		for (Member other : members) {
+			if (other.poneID == m.memberID || other.ptwoID == m.memberID) childs.add(other);
+		}
+		return childs;
+	}
+	private static Member getP1(Member m, ArrayList<Member> members) {
+		for (Member other : members) {
+			if (other.memberID == m.poneID) return other;
+		}
+		return null;
+	}
+	private static Member getP2(Member m, ArrayList<Member> members) {
+		for (Member other : members) {
+			if (other.memberID == m.ptwoID) return other;
+		}		
+		return null;
+	}
+	private static Member getSpouse(Member m, ArrayList<Member> members) {
+		for (Member other : members) {
+			if (other.memberID == m.spouseID) return other;
+		}
+		return null;
+	}
 	public static void createFamily(Family f, String dir) {
 		
 		if (f == null) return;

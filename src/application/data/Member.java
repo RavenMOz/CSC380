@@ -2,6 +2,9 @@ package application.data;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class Member {
 	
     // Variables:
@@ -11,6 +14,11 @@ public class Member {
     Member parentOne, parentTwo, spouse;
     public final long memberID;
     public final long familyID;
+    
+    public long spouseID = 0;
+    public long poneID = 0;
+    public long ptwoID = 0;
+    public long[] childrenIDs;
     
 /////////////////////////////////////////////////////////////////////////
 // These constructors used for creating new dynamic members with no relations.
@@ -86,7 +94,28 @@ public class Member {
      *      Utility = Functions which are used by other functions.
      */
     
-    // Get:
+   
+	public Member(JSONObject json, long mID, long fID) {
+		memberID = mID;
+		familyID = fID;
+		name = json.getString("name").replace("'", "''");
+		biography = json.getString("bio").replace("'", "''");
+		bDay = json.getInt("birthDay");
+		bMonth = json.getInt("birthMonth");
+		bYear = json.getInt("birthYear");
+		spouseID = json.getLong("spouse");
+		poneID = json.getLong("parentOne");
+		ptwoID = json.getLong("parentTwo");
+		
+		JSONArray ch = json.getJSONArray("children");
+		childrenIDs = new long[ch.length()];
+		
+		for (int i = 0; i < ch.length(); i++) {
+			childrenIDs[i] = ch.getLong(i);
+		}
+	}
+	
+	// Get:
     public String getName(){ if ( name == null ) return "EMPTY"; else return this.name; }
     public String getBio(){ if ( biography == null ) return "EMPTY"; else return this.biography; }
     public int getBDay(){ return this.bDay; }

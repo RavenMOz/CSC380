@@ -21,6 +21,12 @@ public class Family {
     	SQLCommands.setRelations(this);
     }
 	
+	public Family(ArrayList<Member> members, long famID, long ownID) {
+		this.familyMembers = members;
+		this.familyID = famID;
+		this.ownerID = ownID;
+	}
+
 	public long getOwnerID() {
 		return this.ownerID;
 	}

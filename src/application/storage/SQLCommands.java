@@ -104,7 +104,7 @@ public class SQLCommands {
 	}
 	public static ArrayList<Member> getChildrenByParentID(long parentID) {
 		
-		String query = "select * from Children where poneID = " + parentID + " or ptwoID = " + parentID;
+		String query = "select * from children where poneID = " + parentID + " or ptwoID = " + parentID;
 		
 		return constructMembers(query);
 
@@ -117,7 +117,7 @@ public class SQLCommands {
 		}
 		
 		if (!isWritten(fam)) {
-			String query = "insert into Families values ( " + fam.getFamilyID() + ", " + fam.getOwnerID() + ")";
+			String query = "insert into userFamilies values ( " + fam.getFamilyID() + ", " + fam.getOwnerID() + ")";
 			send(query);
 		}
 		
@@ -180,18 +180,19 @@ public class SQLCommands {
 			long cid = c.getMemberID();
 			long p1id = 0;
 			long p2id = 0;
+			long fID = c.getFamilyID();
 			
 			if (c.getParentOne() != null) p1id = c.getParentOne().getMemberID();
 			if (c.getParentTwo() != null) p2id = c.getParentTwo().getMemberID();
 			
-			String query = "INSERT INTO Children VALUES (" + cid + ", " + p1id + ", " + p2id + ")";
+			String query = "INSERT INTO children VALUES (" + cid + ", " + p1id + ", " + p2id + "," + fID + ")";
 			send(query);
 		}
 	}
 	private static void clearChildren(Member m) {
-		String query = "delete from Children where poneID = " + m.getMemberID();
+		String query = "delete from children where poneID = " + m.getMemberID();
 		send(query);
-		query = "delete from Children where ptwoID = " + m.getMemberID();
+		query = "delete from children where ptwoID = " + m.getMemberID();
 		send(query);
 	}
 	private static void send(String query) {
@@ -247,7 +248,7 @@ public class SQLCommands {
 		send(query);
 		query = "delete from Families where familyID = " + familyID;
 		send(query);
-		query = "delete from Children where familyID = " + familyID;
+		query = "delete from children where familyID = " + familyID;
 	}
 	public static void deleteFamily(Family fam) {
 		long familyID = fam.getFamilyID();
@@ -255,7 +256,7 @@ public class SQLCommands {
 		send(query);
 		query = "delete from Families where familyID = " + familyID;
 		send(query);
-		query = "delete from Children where familyID = " + familyID;
+		query = "delete from children where familyID = " + familyID;
 	}
 	public static List<Family> getFamilies(long userID) {
 		
@@ -395,7 +396,7 @@ public class SQLCommands {
 //	}
 	private static long getSpouseID(Member otherSpouse) {
 		
-		String query = "select memberID from members where familyID = " + 
+		String query = "select memberID from Members where familyID = " + 
 		otherSpouse.getFamilyID() + " and spouse = " + otherSpouse.getMemberID();
 		
 		long id = 0;
