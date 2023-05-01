@@ -3,6 +3,8 @@ package application.data;
 import java.util.ArrayList;
 
 import application.storage.SQLCommands;
+import application.swing.logininterface.util.UserDB;
+import application.swing.main.Main;
 
 public class Family {
     /* Variables:
@@ -10,14 +12,24 @@ public class Family {
     ArrayList<Member> familyMembers;
     private final long familyID;
     private final long ownerID;
+    private String name;
+    public Member root = null;
     /* Constructor:
      */
-    public Family(){ this.familyMembers = new ArrayList<>(); this.familyID = System.currentTimeMillis() + (long)(Math.random() * 100); this.ownerID = getOwnerID(); }
+    public Family(String name){ 
+    	this.familyMembers = new ArrayList<>(); 
+    	this.familyID = System.currentTimeMillis() + (long)(Math.random() * 100); 
+    	this.ownerID = UserDB.activeUser;
+    	this.root = new Member("New", this);
+    	this.name = name;
+    }
     
 	public Family(long famID){ 
     	this.familyMembers = SQLCommands.getMembersByFamID(famID);
     	familyID = famID;
     	this.ownerID = SQLCommands.getOwnerID(famID);
+    	this.name = SQLCommands.getFamilyName(famID);
+    	if (familyMembers.size() > 0) root = familyMembers.get(0);
     	SQLCommands.setRelations(this);
     }
 	
@@ -37,6 +49,7 @@ public class Family {
      *      Clear = Clears an Array.
      */
     // Get:
+	public String getName() { return name; }
     public Member getMember(String name) {
     	for (Member m : familyMembers) {
 			if (m.getName().contains(name)) return m;
@@ -51,6 +64,25 @@ public class Family {
     	}
     	return null;
     }
+    public Member getRootMember()
+    {
+        return this.root;
+    }
+
+    public void setRootMember(Member targetMember)
+    {
+        if(familyMembers.contains(targetMember))
+        {
+            for(int count = 0; count < familyMembers.size(); count++)
+            {
+                if(familyMembers.get(count) == targetMember)
+                {
+                    this.root = familyMembers.get(count);
+                }
+            }
+        }
+    }
+
     public ArrayList<Member> getMembers() {return familyMembers;}
     public int getSize(){ return familyMembers.size(); }
     public Member getMember( Member targetMember ){
@@ -71,6 +103,13 @@ public class Family {
     public void removeMember( Member targetMember ){
         if ( familyMembers.contains(targetMember)){
             familyMembers.remove(targetMember);
+            for (Member m : familyMembers) {
+            	if (m.getParentOne() == targetMember) m.setParentOne(null);
+            	if (m.getParentTwo() == targetMember) m.setParentTwo(null);
+            	if (m.getSpouse() == targetMember) m.setSpouse(null);
+            	if (m.getChildren().contains(targetMember)) m.removeChild(targetMember);
+            }
+            setRootMember(familyMembers.get(0));
         }
     }
     // Clear:
@@ -79,11 +118,5 @@ public class Family {
 		return familyID;
 	}
 	
-	public String toString() {
-		String s = "Family ID: " + familyID;
-//		for (Member m : familyMembers) {
-//			s += "\n" + m;
-//		}
-		return s;
-	}
+	public String toString() { return name; }
 }

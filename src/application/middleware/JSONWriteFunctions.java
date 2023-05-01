@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONObject;
 
@@ -181,6 +183,55 @@ public class JSONWriteFunctions {
 			e.printStackTrace();
 			System.out.println("END OF REPORT");
 		} 
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> getUserMap() {
+		String json = "";
+		try {
+			json = getJsonAsString(new File("C:\\Users\\samth\\OneDrive\\Desktop\\UserLogins.json"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Map<String,Object> uMap = new HashMap<String,Object>();
+		uMap = (Map<String,Object>) new Gson().fromJson(json, uMap.getClass());
+		return uMap;
+	}
+
+	public static void writeUserMap(Map<String, Object> users) {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		try {
+			FileWriter writer = new FileWriter("C:\\Users\\samth\\OneDrive\\Desktop\\UserLogins.json");
+			gson.toJson(users, writer);
+			writer.flush();
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static void writeUserIDMap(Map<String, Object> userIDs) {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		try {
+			FileWriter writer = new FileWriter("C:\\Users\\samth\\OneDrive\\Desktop\\UserIDs.json");
+			gson.toJson(userIDs, writer);
+			writer.flush();
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> getUserIDMap() {
+		String json = "";
+		try {
+			json = getJsonAsString(new File("C:\\Users\\samth\\OneDrive\\Desktop\\UserIDs.json"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Map<String,Object> uidMap = new HashMap<String,Object>();
+		uidMap = (Map<String,Object>) new Gson().fromJson(json, uidMap.getClass());
+		return uidMap;
 	}
 	
 }

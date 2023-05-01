@@ -2,8 +2,14 @@ package application.data;
 
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import application.storage.SQLCommands;
+import application.swing.projectinterface.actions.MemberButton;
+import application.swing.projectinterface.util.Line;
 
 public class Member {
 	
@@ -19,6 +25,13 @@ public class Member {
     public long poneID = 0;
     public long ptwoID = 0;
     public long[] childrenIDs;
+    
+    private boolean drawnFlag;                              // Has the member been drawn on the GUI?
+    private JButton memberButton;                           // Button tied to the Member that is displayed on the GUI
+    private Line topLine;
+    private Line bottomLine;
+    private ArrayList<Line> lineList = new ArrayList<>();
+    private int lineCount;
     
 /////////////////////////////////////////////////////////////////////////
 // These constructors used for creating new dynamic members with no relations.
@@ -40,11 +53,15 @@ public class Member {
     	this(newID(), fam.getFamilyID(), name, bio, 1, 1, 1, p1, p2, null);
     	if (p1 != null) p1.addChild(this);
     	if (p2 != null) p2.addChild(this);
+    	setParentOne(p1);
+    	setParentTwo(p2);
+    	setButton(new JButton(name));
     	fam.addMember(this);
     }
     // Creates a spouse for the specified dynamic member.
     public Member(String name, String bio, Member sps, Family fam) {
     	this(newID(), sps.getFamilyID(), name, bio, 1, 1, 1, null, null, sps);
+    	setButton(new JButton(name));
     	sps.setSpouse(this);
     	fam.addMember(this);
     }
@@ -63,7 +80,13 @@ public class Member {
         this.biography = bio;
         familyID = famID;
         memberID = mID;
-	
+        this.drawnFlag    = false;
+        this.memberButton = null;
+        this.topLine      = null;
+        this.bottomLine   = null;
+        this.lineCount    = 0;
+    	setButton(new JButton(name));
+    	
     }
     
     //New dynamic member from other dynamic members
@@ -80,6 +103,14 @@ public class Member {
 		parentOne = p1;
 		parentTwo = p2;
 		spouse = sps;
+		
+		this.drawnFlag    = false;
+        this.memberButton = null;
+        this.topLine      = null;
+        this.bottomLine   = null;
+        this.lineCount    = 0;
+    	setButton(new JButton(name));
+
 		
     }
 
@@ -137,6 +168,9 @@ public class Member {
     public Member getChild( int index ){
         return children.get(index);
     }
+    public int getChildCount() {
+    	return children.size();
+    }
     public Member getSpouse(){ return this.spouse; }
     public long getMemberID() { return memberID; }
     public long getFamilyID() { return familyID; }
@@ -147,14 +181,22 @@ public class Member {
     public void setBDay( int newBirthDay ){ this.bDay = newBirthDay; }
     public void setBMonth( int newBirthMonth ){ this.bMonth = newBirthMonth; }
     public void setBYear( int newBirthYear ){ this.bYear = newBirthYear; }
-    public void setSpouse( Member newSpouse ){ this.spouse = newSpouse; newSpouse.spouse = this; }
+    public void setSpouse( Member newSpouse ){ 
+    	this.spouse = newSpouse; 
+    	if (newSpouse != null) {
+    		newSpouse.spouse = this; 
+    	}
+    }
     public void setChildren( ArrayList<Member> newChildren ) { children = newChildren; }
     
     //Add:
     public void addChild( Member iChild ){ this.children.add(iChild); }
     public void addParent( Member newParent ){
         if ( parentOne == null ){ this.parentOne = newParent; }
-        else if ( parentTwo == null ){ this.parentTwo = newParent; }
+        else if ( parentTwo == null ) { 
+        	this.parentTwo = newParent; 
+        	this.parentOne.setSpouse(newParent);
+        }
     }
 
     //Remove:
@@ -186,5 +228,178 @@ public class Member {
     }
 	public void setParentOne(Member pone) { parentOne = pone; }
 	public void setParentTwo(Member ptwo) { parentTwo = ptwo; }
-    
+	public boolean hasparentOne()
+    {
+        if(parentOne != null)
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean hasparentTwo()
+    {
+        if(parentTwo != null)
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean hasTwoParents()
+    {
+        if(parentOne != null && parentTwo != null)
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean hasOneParent()
+    {
+        if(parentOne != null ^ parentTwo != null)
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean hasNoParents()
+    {
+        if(parentOne == null && parentTwo == null)
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean getDrawnFlag()
+    {
+        return this.drawnFlag;
+    }
+
+    public void hasBeenDrawn(boolean flag)
+    {
+        this.drawnFlag = flag;
+    }
+
+    public JButton getButton()
+    {
+        return this.memberButton;
+    }
+
+    public void setButton(JButton newButton)
+    {
+        this.memberButton = newButton;
+        this.memberButton.addActionListener(new MemberButton(this));
+        if (hasParentOne()) {
+        	memberButton.setBounds(memberButton.getX()- (memberButton.getWidth()/2), memberButton.getY(), memberButton.getWidth(), memberButton.getHeight());
+        	
+        }
+        if (topLine != null) {
+        	topLine.x1 = (int) memberButton.getBounds().getCenterX();
+        	topLine.x2 = (int) memberButton.getBounds().getCenterX();
+        }
+    }
+
+    public Line getTopLine()
+    {
+        return this.topLine;
+    }
+
+    public void setTopLine(Line newTopLine)
+    {
+        this.topLine = newTopLine;
+
+    }
+
+    public Line getBottomLine()
+    {
+        return this.bottomLine;
+    }
+
+    public void setBottomLine(Line newBottomLine)
+    {
+        this.bottomLine = newBottomLine;
+    }
+
+    // Adds a Line
+    public void addLine(Line newLine)
+    {
+        this.lineList.add(lineCount, newLine);
+        lineCount++;
+    }
+
+    // Clears all Lines
+    public void clearLines()
+    {
+        lineList.clear();
+        this.lineCount = 0;
+    }
+
+    public Line getLine(Line targetLine)
+    {
+        if(lineList.contains(targetLine))
+        {
+            for(int count = 0; count < lineCount; count++)
+            {
+                if(lineList.get(count) == targetLine)
+                {
+                    return lineList.get(count);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public Line getLine(int index)
+    {
+        return lineList.get(index);
+    }
+
+    public Line getLine(double coordX, double coordY)
+    {
+        Line targetLine = null;
+
+        for(int i = 0; i < lineList.size(); i++)
+        {
+            if(lineList.get(i).getStartX() == coordX && lineList.get(i).getStartY() == coordY)
+            {
+                targetLine = lineList.get(i);
+            }
+        }
+
+        return targetLine;
+    }
+
+    public int getLineCount()
+    {
+        return this.lineCount;
+    }
+	public Member getChild(String text) {
+		for (Member c : getChildren()) {
+			if (c.getName().equalsIgnoreCase(text)) return c;
+		} return null;
+	}
 }

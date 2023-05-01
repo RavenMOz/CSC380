@@ -1,4 +1,4 @@
-package treelinecalculationsalgorithm;
+package application.treeutil;
 
 import java.util.ArrayList;
 import javax.swing.*;

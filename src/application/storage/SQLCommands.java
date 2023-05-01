@@ -111,15 +111,21 @@ public class SQLCommands {
 	}
 	public static void writeFamily(Family fam) {
 		
+		deleteFamily(fam.getFamilyID());
+		
 		for (Member m : fam.getMembers()) {
 			if (isWritten(m)) updateMember(m);
 			else writeMember(m);
 		}
-		
-		if (!isWritten(fam)) {
+		try {
 			String query = "insert into userFamilies values ( " + fam.getFamilyID() + ", " + fam.getOwnerID() + ")";
 			send(query);
+			query = "insert into familynames values ( " + fam.getFamilyID() + ", '" + fam.getName() + "')";
+			send(query);
+		} catch (Exception e) {
+			
 		}
+		
 		
 	}
 	public static Family readFamily(long fID) { return new Family(fID); }
@@ -129,8 +135,8 @@ public class SQLCommands {
 		Date date = Date.valueOf(d);
 		
 		String query = "UPDATE Members SET"
-				+ " name = '" + m.getName()
-				+ "', bio = '" + m.getBio()
+				+ " name = '" + m.getName().replace("'", "''")
+				+ "', bio = '" + m.getBio().replace("'", "''")
 				+ "', bDate = '" + new SimpleDateFormat("yyyy-MM-dd").format(date) + "'";
 		
 		if (m.getParentOne() != null) query += ", pone = " + m.getParentOne().getMemberID();
@@ -246,15 +252,17 @@ public class SQLCommands {
 	public static void deleteFamily(long familyID) {
 		String query = "delete from Members where familyID = " + familyID;
 		send(query);
-		query = "delete from Families where familyID = " + familyID;
-		send(query);
 		query = "delete from children where familyID = " + familyID;
+		send(query);
+		query = "delete from familynames where familyID = " + familyID;
+		send(query);
+		query = "delete from userFamilies where familyID = " + familyID;
 	}
 	public static void deleteFamily(Family fam) {
 		long familyID = fam.getFamilyID();
 		String query = "delete from Members where familyID = " + familyID;
 		send(query);
-		query = "delete from Families where familyID = " + familyID;
+		query = "delete from userfamilies where familyID = " + familyID;
 		send(query);
 		query = "delete from children where familyID = " + familyID;
 	}
@@ -263,6 +271,9 @@ public class SQLCommands {
 		List<Family> fams = new ArrayList<>();
 		
 		for (long l : getFamIDsByUser(userID)) {
+			fams.add(readFamily(l));
+		}
+		for (long l : getSharedFamIDsByUser(userID)) {
 			fams.add(readFamily(l));
 		}
 		
@@ -291,6 +302,33 @@ public class SQLCommands {
 			return new ArrayList<Long>();
 		}
 		return famIDs;
+	}
+	private static List<Long> getSharedFamIDsByUser(long userID) {
+		
+		List<Long> famIDs = new ArrayList<>();
+		
+		String query = "select * from sharedfamilies where userID = " + userID;
+		
+		Statement statement;
+		
+		try {
+			statement = con.createStatement();
+			ResultSet result = statement.executeQuery(query);
+			
+			while (result.next()) {
+				String data = "";
+				data = result.getString(1);
+				famIDs.add(Long.parseLong(data));
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return new ArrayList<Long>();
+		}
+		return famIDs;
+	}
+	public static void share(Family f, long userID) {
+		String query = "insert into sharedFamilies values (" + f.getFamilyID() + ", " + userID + ")";
+		send(query);
 	}
 	public static void setRelations(Family f) {
 		for (Member m : f.getMembers()) {
@@ -422,5 +460,50 @@ public class SQLCommands {
 	public static void deleteMember(long memberID) {
 		String query = "delete from Members where memberID = " + memberID;
 		send(query);
+	}
+	public static String getFamilyName(long famID) {
+		String query = "select name from familynames where familyID = " + famID;
+				
+		String name = "";
+				
+		Statement statement;
+				
+		try {
+			statement = con.createStatement();	
+			ResultSet result = statement.executeQuery(query);
+				
+			while (result.next()) {
+				String data = "";
+				data = result.getString(1);
+				name = data;
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return "error";
+		}
+		
+		return name;
+	}
+	public static boolean checkPassword(String uName2, String password) {
+		String query = "select name from userlogins where username = " + uName2;
+		
+		String pwd = "";
+				
+		Statement statement;
+				
+		try {
+			statement = con.createStatement();	
+			ResultSet result = statement.executeQuery(query);
+				
+			while (result.next()) {
+				String data = "";
+				data = result.getString(1);
+				pwd = data;
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return (password == pwd);
 	}
 }
