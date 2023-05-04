@@ -8,9 +8,9 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import application.swing.main.Main;
+import application.swing.projectinterface.treecomponents.TreePanel;
 import application.swing.projectinterface.util.FamilyTree;
 import application.swing.projectinterface.util.FamilyUtil;
-import application.swing.projectinterface.util.TreePanel;
 
 public class TEI extends JPanel {
 

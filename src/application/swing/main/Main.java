@@ -20,6 +20,8 @@ import application.swing.projectinterface.components.MemberEditor;
 import application.swing.projectinterface.components.TEI;
 import application.swing.projectinterface.components.TreeContainer;
 import application.swing.projectinterface.subcomponents.TitlePanel;
+import application.swing.projectinterface.util.ButtonChecker;
+import application.swing.projectinterface.util.ConnectionChecker;
 import application.swing.projectinterface.util.FamilyTreePanel;
 import application.swing.projectinterface.util.FieldChecker;
 import application.swing.projectinterface.util.Phase;
@@ -81,6 +83,10 @@ public class Main {
 		t1.start();
 		Timer t2 = new Timer(17, new FieldChecker());
 		t2.start();
+		Timer t3 = new Timer(1000, new ConnectionChecker());
+		t3.start();
+		Timer t4 = new Timer(17, new ButtonChecker());
+		t4.start();
 		
 		window.addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
@@ -88,6 +94,8 @@ public class Main {
 		        thread = null;
 		        t1.stop();
 		        t2.stop();
+		        t3.stop();
+		        t4.stop();
 		    }
 		});
 		

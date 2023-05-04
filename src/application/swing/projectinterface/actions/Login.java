@@ -31,9 +31,10 @@ public class Login implements ActionListener {
 		String password = new String(pwdField.getPassword());
 		if (Main.userDB.verifyUserExists(uName) &&
 			Main.userDB.verifyPassword(uName, password)) {
+			Main.loginPane.setLoadingFields();
 			Main.userDB.login(uName);
 		} else {
-			System.out.println("Invalid Credentials!");
+
 		}
 	}
 	

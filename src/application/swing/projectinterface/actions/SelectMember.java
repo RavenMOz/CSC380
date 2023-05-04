@@ -9,11 +9,11 @@ import java.util.Date;
 import application.data.Member;
 import application.swing.main.Main;
 
-public class MemberButton implements ActionListener {
+public class SelectMember implements ActionListener {
 
 	Member member;
 	
-	public MemberButton(Member m) {
+	public SelectMember(Member m) {
 		member = m;
 	}
 	

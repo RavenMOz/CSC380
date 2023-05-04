@@ -9,7 +9,7 @@ public class BackToSelect implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-//		Main.treeSelectionPane();
+		Main.treeSelectionPane.addSelectComponents();
 	}
 
 }

@@ -7,8 +7,6 @@ import javax.swing.JButton;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import application.storage.SQLCommands;
-import application.swing.projectinterface.actions.MemberButton;
 import application.swing.projectinterface.util.Line;
 
 public class Member {
@@ -311,15 +309,15 @@ public class Member {
     public void setButton(JButton newButton)
     {
         this.memberButton = newButton;
-        this.memberButton.addActionListener(new MemberButton(this));
-        if (hasParentOne()) {
-        	memberButton.setBounds(memberButton.getX()- (memberButton.getWidth()/2), memberButton.getY(), memberButton.getWidth(), memberButton.getHeight());
-        	
-        }
-        if (topLine != null) {
-        	topLine.x1 = (int) memberButton.getBounds().getCenterX();
-        	topLine.x2 = (int) memberButton.getBounds().getCenterX();
-        }
+//        this.memberButton.addActionListener(new MemberButton(this));
+//        if (hasParentOne()) {
+//        	memberButton.setBounds(memberButton.getX()- (memberButton.getWidth()/2), memberButton.getY(), memberButton.getWidth(), memberButton.getHeight());
+//        	
+//        }
+//        if (topLine != null) {
+//        	topLine.x1 = (int) memberButton.getBounds().getCenterX();
+//        	topLine.x2 = (int) memberButton.getBounds().getCenterX();
+//        }
     }
 
     public Line getTopLine()

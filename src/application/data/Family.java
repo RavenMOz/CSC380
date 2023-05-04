@@ -20,7 +20,7 @@ public class Family {
     	this.familyMembers = new ArrayList<>(); 
     	this.familyID = System.currentTimeMillis() + (long)(Math.random() * 100); 
     	this.ownerID = UserDB.activeUser;
-    	this.root = new Member("New", this);
+    	this.root = new Member("New Member", this);
     	this.name = name;
     }
     
@@ -98,6 +98,7 @@ public class Family {
     // Add:
     public void addMember( Member newMember ){
         familyMembers.add(newMember);
+        setRootMember(newMember);
     }
     // Remove:
     public void removeMember( Member targetMember ){

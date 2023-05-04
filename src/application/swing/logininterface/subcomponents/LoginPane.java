@@ -1,6 +1,7 @@
 package application.swing.logininterface.subcomponents;
 
 import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,6 +14,7 @@ import application.swing.projectinterface.actions.CreateNewUser;
 import application.swing.projectinterface.actions.Login;
 import application.swing.projectinterface.actions.NewUserPrompt;
 import application.swing.projectinterface.subcomponents.Button;
+import application.swing.projectinterface.util.SubPhase;
 
 public class LoginPane extends JPanel{
 
@@ -30,8 +32,9 @@ public class LoginPane extends JPanel{
 	Button newUser;
 	Button back;
 	Button createUser;
+	JLabel loading;
 	
-	boolean newUserMenu = false;
+	SubPhase phase;
 	
 	public LoginPane() {
 		
@@ -47,7 +50,7 @@ public class LoginPane extends JPanel{
 	public void setLoginFields() {
 		
 		removeAll();
-		newUserMenu = false;
+		phase = SubPhase.LOGIN;
 		
 		username = new JLabel("Username:");
 			
@@ -76,10 +79,22 @@ public class LoginPane extends JPanel{
 
 	}
 	
+	public void setLoadingFields() {
+		
+		removeAll();
+		phase = SubPhase.LOADING;
+		loading = new JLabel("Loading...");
+		loading.setFont(new Font("Lexend", Font.BOLD, 26));
+		add(loading);
+		resize();
+		
+		
+	}
+	
 	public void setNewUserFields() {
 		
 		removeAll();
-		newUserMenu = true;
+		phase = SubPhase.NEWUSER;
 		
 		username = new JLabel("Username:");
 		
@@ -115,7 +130,7 @@ public class LoginPane extends JPanel{
 	
 	public void resize() {
 		
-		if (newUserMenu) {
+		if (phase == SubPhase.NEWUSER) {
 			Component[] group1 = {username, unameField};
 			Component[] group2 = {pwd, pwf};
 			Component[] group3 = {pwdconfirm, pwfconfirm};
@@ -125,7 +140,7 @@ public class LoginPane extends JPanel{
 			groupCenter(100,10,group2);
 			groupCenter(150,10,group3);
 			groupCenter(200,10,group4);
-		} else {
+		} else if (phase == SubPhase.LOGIN){
 			Component[] group1 = {username, unameField};
 			Component[] group2 = {pwd, pwf};
 			Component[] group3 = {login, newUser};
@@ -133,6 +148,10 @@ public class LoginPane extends JPanel{
 			groupCenter(50,10,group1);
 			groupCenter(100,10,group2);
 			groupCenter(150,10,group3);
+		} else {
+			Component[] group1 = {loading};
+			
+			groupCenter(getHeight()/2, 0, group1);
 		}
 		
 		

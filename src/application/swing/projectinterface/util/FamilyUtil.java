@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import application.data.Family;
 import application.data.Member;
 import application.swing.main.Main;
-import application.swing.projectinterface.actions.MemberButton;
+import application.swing.projectinterface.actions.SelectMember;
 
 public class FamilyUtil {
 	
@@ -43,7 +43,7 @@ public class FamilyUtil {
 		JButton b = new JButton(toDraw.getName());
 		toDraw.setButton(b);
 		b.setFont(font);
-		b.addActionListener(new MemberButton(toDraw));
+		b.addActionListener(new SelectMember(toDraw));
 		b.setBounds(x,y,baseWidth,baseHeight);
 		panel.add(b);
 		

@@ -31,7 +31,6 @@ public class Resizer implements ActionListener {
 			Main.treeSelectionPanel.resize();
 			Main.treeSelectionPane.resize();
 			Main.treeSelectionPane.checkButtons();
-
 		}
 		break;
 		case POPUP: Main.tei.resize();
