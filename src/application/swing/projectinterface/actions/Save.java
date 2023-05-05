@@ -5,10 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
 import application.storage.SQLCommands;
 import application.swing.main.Main;
-import application.swing.projectinterface.subcomponents.Button;
 
 public class Save implements ActionListener {
 	
@@ -17,15 +17,26 @@ public class Save implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		SQLCommands.writeFamily(Main.activeFamily);
 		
 		for (Component c : Main.tei.getComponents()) {
 			c.repaint();
 		}
 		
-		Main.globNav.save.setText("Saved.");
-		Main.globNav.save.setIcon(new ImageIcon("/check.png"));
-		saveTimer = System.currentTimeMillis();
+		Main.globNav.save.setEnabled(false);
+		Main.globNav.save.setText("Saving...");
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				SQLCommands.writeFamily(Main.activeFamily);
+				Main.globNav.save.setText("Saved.");
+				Main.globNav.save.setIcon(new ImageIcon("/check.png"));
+				saveTimer = System.currentTimeMillis();
+				Main.tei.editsMade = false;
+			}
+		});
+		
+		
 
 //		for (OvalButton b : Main.globNav.buttons) {
 //			b.setEnabled(false);

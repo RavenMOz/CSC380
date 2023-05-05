@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import application.storage.SQLCommands;
 import application.swing.logininterface.util.UserDB;
-import application.swing.main.Main;
 
 public class Family {
     /* Variables:
@@ -37,6 +36,10 @@ public class Family {
 		this.familyMembers = members;
 		this.familyID = famID;
 		this.ownerID = ownID;
+		
+		if (familyMembers.size() == 0) {
+			familyMembers.add(new Member("New Member", "", this));
+		}
 	}
 
 	public long getOwnerID() {
@@ -97,20 +100,44 @@ public class Family {
     }
     // Add:
     public void addMember( Member newMember ){
-        familyMembers.add(newMember);
-        setRootMember(newMember);
+        if (!familyMembers.contains(newMember)) {
+        	familyMembers.add(newMember);
+        }
+        if (familyMembers.size() == 1) {
+            setRootMember(newMember);
+        }
     }
     // Remove:
-    public void removeMember( Member targetMember ){
-        if ( familyMembers.contains(targetMember)){
-            familyMembers.remove(targetMember);
-            for (Member m : familyMembers) {
-            	if (m.getParentOne() == targetMember) m.setParentOne(null);
-            	if (m.getParentTwo() == targetMember) m.setParentTwo(null);
-            	if (m.getSpouse() == targetMember) m.setSpouse(null);
-            	if (m.getChildren().contains(targetMember)) m.removeChild(targetMember);
-            }
-            setRootMember(familyMembers.get(0));
+    public void removeMember( Member toRemove ){
+        if ( familyMembers.contains(toRemove)){
+            familyMembers.remove(toRemove);
+            Member newRoot = null;
+    		
+    		if (toRemove.hasSpouse()) {
+    			if (newRoot == null) newRoot = toRemove.getSpouse();
+    			toRemove.getSpouse().setSpouse(null);
+    		}
+    		if (toRemove.hasparentOne()) {
+    			if (newRoot == null) newRoot = toRemove.getParentOne();
+    			toRemove.getParentOne().removeChild(toRemove);
+    		}
+    		if (toRemove.hasparentTwo()) {
+    			if (newRoot == null) newRoot = toRemove.getParentTwo();
+    			toRemove.getParentTwo().removeChild(toRemove);
+    		}
+    		for (Member child : toRemove.getChildren()) {
+    			if (newRoot == null) newRoot = child;
+    			child.removeParent(toRemove);
+    		}
+    		
+    		if (getMembers().size() == 0) {
+    			addMember(new Member("New Member", this));
+    			setRootMember(getMember(0));
+    		} else {
+    			setRootMember(newRoot);
+    		}
+            
+//            setRootMember(familyMembers.get(0));
         }
     }
     // Clear:

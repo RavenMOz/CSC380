@@ -57,13 +57,13 @@ public class MemberEditor extends JPanel {
 	JLabel bdayLabelShadow;
 	DateEditor dateEditor;
 	
-	JButton addspouse;
-	JButton addparent;
-	JButton addchild;
+	public JButton addspouse;
+	public JButton addparent;
+	public JButton addchild;
 	JButton removespouse;
 	JButton removeparent;
 	JButton removechild;
-	JButton removethis;
+	public JButton removethis;
 	
 	List<JButton> buttons;
 	
@@ -116,20 +116,6 @@ public class MemberEditor extends JPanel {
 			b.setBorder(border);
 			b.setFont(new Font("Lexend", Font.PLAIN, 16));
 			add(b);
-		}
-		
-	}
-	
-	public void checkButtons() {
-		if (Main.activeMember.hasSpouse()) {
-			addspouse.setEnabled(false);
-		} else {
-			addspouse.setEnabled(true);
-		}
-		if (Main.activeMember.hasTwoParents()) {
-			addparent.setEnabled(false);
-		} else {
-			addparent.setEnabled(true);
 		}
 		
 	}
@@ -313,7 +299,6 @@ public class MemberEditor extends JPanel {
 		int x3 = 11 + (width*2);
 		int y1 = (int) (getSize().getHeight() - (height*4));
 		int y2 = y1+height+3;
-		int y3 = y2+height+3;
 		
 		addspouse.setBounds(x1, y1, width, height);
 		addparent.setBounds(x2, y1, width, height);

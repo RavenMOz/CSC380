@@ -38,6 +38,14 @@ public class FieldChecker implements ActionListener {
 			!Main.memEditor.bioField.isEnabled()) {
 			Main.memEditor.bioField.setEnabled(true);
 		}
+		if (Main.activeMember == null &&
+				Main.memEditor.bDayField.isEnabled()) {
+				Main.memEditor.bDayField.setEnabled(false);
+			}
+			if (Main.activeMember != null &&
+				!Main.memEditor.bDayField.isEnabled()) {
+				Main.memEditor.bDayField.setEnabled(true);
+			}
 		
 		
 	}
@@ -48,12 +56,15 @@ public class FieldChecker implements ActionListener {
 		
 		if (!Main.activeMember.getName().equals(Main.memEditor.nameField.getText())) {
 			Main.activeMember.setName(Main.memEditor.nameField.getText());
+			Main.tei.editsMade = true;
 		}
 		if (!Main.activeMember.getBio().equals(Main.memEditor.bioField.getText())) {
 			Main.activeMember.setBio(Main.memEditor.bioField.getText());
+			Main.tei.editsMade = true;
 		}
 		if (!Main.activeMember.getButton().getText().equals(Main.memEditor.nameField.getText())) {
 			Main.activeMember.getButton().setText(Main.memEditor.nameField.getText());
+			Main.tei.editsMade = true;
 		}
 
 		LocalDate bday = ((Date)Main.memEditor.bDayField.getValue()).toInstant()

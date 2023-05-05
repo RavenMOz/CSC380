@@ -8,9 +8,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import application.swing.main.Main;
-import application.swing.projectinterface.treecomponents.TreePanel;
-import application.swing.projectinterface.util.FamilyTree;
-import application.swing.projectinterface.util.FamilyUtil;
 
 public class TEI extends JPanel {
 
@@ -20,6 +17,8 @@ public class TEI extends JPanel {
 	
 	Graphics2D g2;
 	BufferedImage screenIMG;
+
+	public boolean editsMade = false;
 			
 	public TEI() {
 		
@@ -29,7 +28,7 @@ public class TEI extends JPanel {
 				
 		Main.tei = this;
 		Main.memEditor = new MemberEditor();
-		FamilyTree.setupFamilyPanel();
+//		FamilyTree.setupFamilyPanel();
 		Main.treeContainer = new TreeContainer();
 		Main.globNav = new GlobalNavigation(this);
 		
@@ -45,7 +44,7 @@ public class TEI extends JPanel {
 		add(Main.memEditor, BorderLayout.EAST);
 		add(Main.globNav, BorderLayout.NORTH);
 		
-		FamilyTree.draw();
+//		FamilyTree.draw();
 
 	}
 	
@@ -65,7 +64,7 @@ public class TEI extends JPanel {
 	}
 	
 	public void resize() {
-		setBounds(0,0,Main.window.getWidth(), Main.window.getHeight());
+		setBounds(0,0,Main.mainPanel.getWidth(), Main.mainPanel.getHeight());
 		for (Component c : getComponents()) c.repaint();
 		repaint();
 	}	

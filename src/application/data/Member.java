@@ -1,5 +1,6 @@
 package application.data;
 
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -7,6 +8,7 @@ import javax.swing.JButton;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import application.swing.projectinterface.actions.SelectMember;
 import application.swing.projectinterface.util.Line;
 
 public class Member {
@@ -188,7 +190,11 @@ public class Member {
     public void setChildren( ArrayList<Member> newChildren ) { children = newChildren; }
     
     //Add:
-    public void addChild( Member iChild ){ this.children.add(iChild); }
+    public void addChild( Member iChild ) { 
+    	if (!children.contains(iChild)) {
+    		this.children.add(iChild); 
+    	}
+    }
     public void addParent( Member newParent ){
         if ( parentOne == null ){ this.parentOne = newParent; }
         else if ( parentTwo == null ) { 
@@ -309,7 +315,7 @@ public class Member {
     public void setButton(JButton newButton)
     {
         this.memberButton = newButton;
-//        this.memberButton.addActionListener(new MemberButton(this));
+        this.memberButton.addActionListener(new SelectMember(this));
 //        if (hasParentOne()) {
 //        	memberButton.setBounds(memberButton.getX()- (memberButton.getWidth()/2), memberButton.getY(), memberButton.getWidth(), memberButton.getHeight());
 //        	
@@ -394,6 +400,9 @@ public class Member {
     public int getLineCount()
     {
         return this.lineCount;
+    }
+    public void setBounds(Rectangle newBounds) {
+    	memberButton.setBounds(newBounds);
     }
 	public Member getChild(String text) {
 		for (Member c : getChildren()) {

@@ -24,6 +24,7 @@ public class MemberButton extends JButton {
 		
 		setBounds(rootX, rootY, defWidth, defHeight);
 		setText(m.getName());
+		setFont(TreePanel.font);
 		System.out.println(m.getName());
 		
 	}

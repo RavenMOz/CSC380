@@ -1,11 +1,16 @@
 package application.treeutil;
 
 import java.awt.Color;
+
 import javax.swing.JComponent;
 
 public class Line extends JComponent
 {
-    final int x1; 
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8641603418117900382L;
+	final int x1; 
     final int y1;
     final int x2;
     final int y2;   

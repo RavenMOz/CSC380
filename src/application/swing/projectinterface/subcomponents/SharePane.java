@@ -3,6 +3,8 @@ package application.swing.projectinterface.subcomponents;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -18,7 +20,8 @@ public class SharePane extends JPanel {
 	private static final long serialVersionUID = -8092436119742191520L;
 
 	public Overlay overlay;
-	JTextField unameField;
+	public static JTextField unameField;
+	public static Button sharebutton = null;
 	
 	
 	public SharePane() {
@@ -37,10 +40,30 @@ public class SharePane extends JPanel {
 		add(getFormattedLabel("Enter a user:"));
 		unameField = new JTextField(15);
 		add(unameField);
-		Button b = new Button("Share", new ConfirmShare(unameField, this));
-		add(b);
+		sharebutton = new Button("Share", new ConfirmShare(unameField, this));
+		Button cancel = new Button("Cancel", new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Main.mainPanel.remove(getThis());
+				Main.mainPanel.remove(overlay);
+				Main.globNav.clear.setEnabled(true);
+				Main.globNav.close.setEnabled(true);
+				Main.globNav.share.setEnabled(true);
+				Main.globNav.export.setEnabled(true);
+				Main.globNav.save.setEnabled(true);
+				SharePane.sharebutton = null;				
+			}
+			
+		});
+		add(cancel);
+		add(sharebutton);
 		
 		
+	}
+	
+	private SharePane getThis() {
+		return this;
 	}
 	
 	void resize() {

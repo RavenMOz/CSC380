@@ -12,6 +12,7 @@ import javax.swing.JScrollPane;
 
 import application.swing.main.Main;
 import application.swing.projectinterface.subcomponents.TitlePanel;
+import application.swing.projectinterface.treecomponents.TreePanel;
 
 public class TreeContainer extends JPanel {
 
@@ -25,9 +26,14 @@ public class TreeContainer extends JPanel {
 		setLayout(new BorderLayout());
 		
 		setBorder(BorderFactory.createLineBorder(Color.white));
-		scroller = new JScrollPane((JPanel)Main.treePanel);
+		scroller = new JScrollPane(new TreePanel());
 		scroller.setBorder(BorderFactory.createLineBorder(Color.white, 1));
-		scroller.setHorizontalScrollBar(new JScrollBar(JScrollBar.HORIZONTAL));
+		scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		JScrollBar topBar = scroller.getHorizontalScrollBar();
+		topBar.setBounds(0, 0, 10, 100);
+		scroller.add(topBar);
+		
 		Main.titlePanel = new TitlePanel(Main.activeFamily.getName());
 		add(Main.titlePanel, BorderLayout.NORTH);
 		add(scroller, BorderLayout.CENTER);

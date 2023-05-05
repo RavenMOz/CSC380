@@ -1,6 +1,8 @@
 package application.swing.main;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -20,9 +22,9 @@ import application.swing.projectinterface.components.MemberEditor;
 import application.swing.projectinterface.components.TEI;
 import application.swing.projectinterface.components.TreeContainer;
 import application.swing.projectinterface.subcomponents.TitlePanel;
+import application.swing.projectinterface.treecomponents.TreePanel;
 import application.swing.projectinterface.util.ButtonChecker;
 import application.swing.projectinterface.util.ConnectionChecker;
-import application.swing.projectinterface.util.FamilyTreePanel;
 import application.swing.projectinterface.util.FieldChecker;
 import application.swing.projectinterface.util.Phase;
 import application.swing.projectinterface.util.Resizer;
@@ -37,7 +39,7 @@ public class Main {
 	public static GlobalNavigation globNav;
 	public static MemberEditor memEditor;
 	public static TreeContainer treeContainer;
-	public static FamilyTreePanel treePanel;
+	public static TreePanel treePanel;
 //	public static TreePanel treePanel;
 	public static Member activeMember;
 	public static LoginPanel loginPanel;
@@ -88,6 +90,21 @@ public class Main {
 		Timer t4 = new Timer(17, new ButtonChecker());
 		t4.start();
 		
+		Timer t5 = new Timer(17, new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				if (currentPhase == Phase.EDIT) {
+					treePanel.draw();
+				}
+				
+			}
+			
+		});
+		
+		t5.start();
+		
 		window.addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
 		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -96,6 +113,7 @@ public class Main {
 		        t2.stop();
 		        t3.stop();
 		        t4.stop();
+		        t5.stop();
 		    }
 		});
 		

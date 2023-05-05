@@ -6,7 +6,6 @@ import java.awt.event.ActionListener;
 
 import application.data.Member;
 import application.swing.main.Main;
-import application.swing.projectinterface.util.FamilyTree;
 
 public class AddSpouse implements ActionListener {
 
@@ -14,8 +13,12 @@ public class AddSpouse implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Main.treePanel.setMinimumSize(new Dimension(Main.treePanel.getWidth() + 500, Main.treePanel.getHeight()));
 		Member active = Main.activeMember;
-		new Member("New Member", "", active, Main.activeFamily);
-		FamilyTree.draw();
+		Member spouse = new Member("New Member", "", Main.activeFamily);
+		active.setSpouse(spouse);
+		spouse.setSpouse(active);
+		
+		Main.tei.editsMade = true;
+
 	}
 
 }

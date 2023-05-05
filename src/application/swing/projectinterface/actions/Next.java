@@ -27,7 +27,6 @@ public class Next implements ActionListener {
 		Main.memEditor.bioFieldScroller.setEnabled(true);
 		Main.memEditor.nameField.setEnabled(true);
 			
-		pane.done();
 		pane.overlay.done();
 		
 	}

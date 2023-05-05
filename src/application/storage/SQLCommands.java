@@ -13,10 +13,11 @@ import java.util.List;
 
 import application.data.Family;
 import application.data.Member;
+import application.swing.logininterface.util.UserDB;
 
 public class SQLCommands {
 	
-	static final String url = "jdbc:mysql://localhost:3306/familytree";
+	static final String url = "jdbc:mysql://67.246.103.207:3306/familytree";
 	static final String uname = "testuser";
 	static final String pwd = "123";
 	static Connection con = getConnection(); 
@@ -118,12 +119,12 @@ public class SQLCommands {
 			else writeMember(m);
 		}
 		try {
-			String query = "insert into userFamilies values ( " + fam.getFamilyID() + ", " + fam.getOwnerID() + ")";
+			String query = "insert into userfamilies values ( " + fam.getFamilyID() + ", " + fam.getOwnerID() + ")";
 			send(query);
-			query = "insert into familynames values ( " + fam.getFamilyID() + ", '" + fam.getName() + "')";
+			query = "insert into familynames values ( " + fam.getFamilyID() + ", '" + fam.getName().replace("'", "''") + "')";
 			send(query);
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 		
 		
@@ -229,7 +230,7 @@ public class SQLCommands {
 	}
 	public static long getOwnerID(long famID) {
 		long id = 0;
-		String query = "select * from userFamilies where familyID = " + famID;
+		String query = "select userID from userfamilies where familyID = " + famID;
 		
 		Statement statement;
 		try {
@@ -256,7 +257,8 @@ public class SQLCommands {
 		send(query);
 		query = "delete from familynames where familyID = " + familyID;
 		send(query);
-		query = "delete from userFamilies where familyID = " + familyID;
+		query = "delete from userfamilies where familyID = " + familyID;
+		send(query);
 	}
 	public static void deleteFamily(Family fam) {
 		long familyID = fam.getFamilyID();
@@ -266,6 +268,13 @@ public class SQLCommands {
 		send(query);
 		query = "delete from children where familyID = " + familyID;
 	}
+	
+	public static void deleteShares(Family fam) {
+		long familyID = fam.getFamilyID();
+		String query = "delete from sharedfamilies where familyID = " + familyID;
+		send(query);
+	}
+	
 	public static List<Family> getFamilies(long userID) {
 		
 		List<Family> fams = new ArrayList<>();
@@ -284,7 +293,7 @@ public class SQLCommands {
 		
 		List<Long> famIDs = new ArrayList<>();
 		
-		String query = "select * from userFamilies where userID = " + userID;
+		String query = "select * from userfamilies where userID = " + userID;
 		
 		Statement statement;
 		
@@ -327,7 +336,7 @@ public class SQLCommands {
 		return famIDs;
 	}
 	public static void share(Family f, long userID) {
-		String query = "insert into sharedFamilies values (" + f.getFamilyID() + ", " + userID + ")";
+		String query = "insert into sharedfamilies values (" + f.getFamilyID() + ", " + userID + ")";
 		send(query);
 	}
 	public static void setRelations(Family f) {
@@ -485,7 +494,7 @@ public class SQLCommands {
 		return name;
 	}
 	public static boolean checkPassword(String uName2, String password) {
-		String query = "select name from userlogins where username = " + uName2;
+		String query = "select password from userlogins where username = '" + uName2 + "'";
 		
 		String pwd = "";
 				
@@ -504,6 +513,59 @@ public class SQLCommands {
 			e.printStackTrace();
 			return false;
 		}
-		return (password == pwd);
+		return (password.equals(pwd));
 	}
+	
+	public static boolean userExists(String uName2) {
+		String query = "select password from userlogins where username = '" + uName2 + "'";
+		
+		String pwd = null;
+				
+		Statement statement;
+				
+		try {
+			statement = con.createStatement();	
+			ResultSet result = statement.executeQuery(query);
+				
+			while (result.next()) {
+				String data = "";
+				data = result.getString(1);
+				pwd = data;
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return (pwd != null);
+	}
+	
+	public static long getUserID(String uName) {
+		String query = "select userid from userIDs where username = '" + uName +"'";
+		
+		long uid = 0;
+				
+		Statement statement;
+				
+		try {
+			statement = con.createStatement();	
+			ResultSet result = statement.executeQuery(query);
+				
+			while (result.next()) {
+				String data = "";
+				data = result.getString(1);
+				uid = Long.parseLong(data);
+			} 
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		}
+		return uid;
+	}
+	public static void createUser(String uname2, String pwd2) {
+		String query = "insert into userlogins values ('" + uname2 + "', '" + pwd2 + "')";
+		send(query);
+		query = "insert into userIDs values ('" + uname2 + "', " + UserDB.generateID() + ")";
+		send(query);		
+	}
+
 }

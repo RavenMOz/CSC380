@@ -3,9 +3,6 @@ package application.swing.projectinterface.actions;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JList;
-
-import application.data.Family;
 import application.swing.main.Main;
 import application.swing.projectinterface.components.TEI;
 import application.swing.projectinterface.util.Phase;

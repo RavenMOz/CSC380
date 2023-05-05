@@ -22,9 +22,15 @@ public class ConfirmShare implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (Main.userDB.verifyUserExists(unameField.getText())) {
-			SQLCommands.share(Main.activeFamily, Main.userDB.getUserID(unameField.getText()));
+			SQLCommands.share(Main.activeFamily, SQLCommands.getUserID(unameField.getText()));
 			Main.mainPanel.remove(pane);
 			Main.mainPanel.remove(pane.overlay);
+			Main.globNav.clear.setEnabled(true);
+			Main.globNav.close.setEnabled(true);
+			Main.globNav.share.setEnabled(true);
+			Main.globNav.export.setEnabled(true);
+			Main.globNav.save.setEnabled(true);
+			SharePane.sharebutton = null;
 		}
 	}
 	

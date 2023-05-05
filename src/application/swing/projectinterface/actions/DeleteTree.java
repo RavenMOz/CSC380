@@ -17,6 +17,7 @@ public class DeleteTree implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		SQLCommands.deleteFamily(Main.familyList.getSelectedValue());
+		SQLCommands.deleteShares(Main.familyList.getSelectedValue());
 		Vector<Family> listVector = new Vector<>(SQLCommands.getFamilies(UserDB.activeUser));
 		Main.familyList = new JList<>(listVector);
 		Main.mainPanel.remove(Main.treeSelectionPanel);

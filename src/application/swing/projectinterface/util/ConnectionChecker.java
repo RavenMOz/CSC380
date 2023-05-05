@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import application.swing.main.Main;
+import application.swing.projectinterface.subcomponents.Button;
 
 public class ConnectionChecker implements ActionListener {
 
@@ -37,7 +38,9 @@ public class ConnectionChecker implements ActionListener {
 		
 		connected = canConnect();
 		
-		if (startStatus != connected) {
+		boolean change = startStatus != connected;
+		
+		if (change) {
 			if (!connected) {
 				old = Main.mainPanel.activePanel;
 				Main.mainPanel.removeAll();
@@ -75,6 +78,21 @@ public class ConnectionChecker implements ActionListener {
 		labelShadow.setFont(new Font("Lexend", Font.BOLD, 30));
 		label.setBorder(new EmptyBorder(-10,40,10,10));
 		labelShadow.setBorder(new EmptyBorder(-10,40,10,10));
+		Button retry = new Button("Retry", new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				if (canConnect()) {
+					Main.mainPanel.removeAll();
+					Main.mainPanel.setActivePanel(old);
+				}
+				
+			}
+			
+		});
+		retry.setBounds(90, Main.window.getHeight()- (Main.window.getHeight()/4), 150, 75);
+		p.add(retry);
 		p.add(label);
 		p.add(labelShadow);
 		reconnected = false;

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 
 import application.swing.main.Main;
 
@@ -21,7 +22,9 @@ public class Export implements ActionListener {
 		Main.treePanel.paint(g);
 		
 		try {
-	        ImageIO.write(img, "png", new File("C:\\Users\\samth\\OneDrive\\Documents\\tree.png"));
+			String name = Main.activeFamily.getName();
+			System.out.println(new JFileChooser().getFileSystemView().getDefaultDirectory().toString());
+	        ImageIO.write(img, "png", new File(new JFileChooser().getFileSystemView().getDefaultDirectory().toString() + "\\" + name + ".png"));
 	    } catch (IOException ex) {
 	    	ex.printStackTrace();
 	    }

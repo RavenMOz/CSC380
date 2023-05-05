@@ -25,7 +25,7 @@ public class MainPanel extends JLayeredPane {
 	}
 
 	public void resize() {
-		setSize(Main.window.getSize());
+		setSize(Main.window.getWidth(), Main.window.getHeight()-35);
 	}
 	
 }

@@ -29,17 +29,17 @@ public class TreeSelectionPane extends JPanel{
 	Button nextButton;
 	Button signOut;
 	Button newTree;
-	Button delete;
+	public Button delete;
 	
 	JLabel label;
 	JLabel user;
 	
 	JLabel instruct;
-	JTextField treeNameField;
+	public JTextField treeNameField;
 	Button back;
-	Button create;
-	
-	boolean newTreeMode = false;
+	public Button create;
+		
+	public boolean newTreeMode = false;
 	
 	public TreeSelectionPane() {
 		
@@ -53,10 +53,10 @@ public class TreeSelectionPane extends JPanel{
 	}
 
 	public void addSelectComponents() {
-		
+				
 		removeAll();
 		newTreeMode = false;
-		
+				
 		label = new JLabel("Welcome back, " + UserDB.activeUserName + "!");
 		add(label);
 		user = new JLabel("Your trees:");

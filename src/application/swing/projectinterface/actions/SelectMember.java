@@ -21,7 +21,6 @@ public class SelectMember implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Main.memEditor.nameField.setText(member.getName());
 		Main.memEditor.bioField.setText(member.getBio());
-		Main.globNav.save.setEnabled(true);
 
 		try {
 			Date d = new SimpleDateFormat("MM/dd/yyyy").parse(member.getBMonth() + "/" + member.getBDay() + "/" + member.getBYear());
@@ -32,7 +31,8 @@ public class SelectMember implements ActionListener {
 		}
 		
 		Main.activeMember = member;
-		Main.memEditor.checkButtons();
+		Main.activeFamily.setRootMember(member);
+
 	}
 
 }

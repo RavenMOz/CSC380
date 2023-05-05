@@ -31,10 +31,10 @@ public class LoginPane extends JPanel{
 	JPasswordField pwfconfirm;
 	Button newUser;
 	Button back;
-	Button createUser;
+	public Button createUser;
 	JLabel loading;
 	
-	SubPhase phase;
+	public SubPhase phase;
 	
 	public LoginPane() {
 		
@@ -125,6 +125,26 @@ public class LoginPane extends JPanel{
 		repaint();
 		resize();
 
+		
+	}
+	
+	public boolean viableFields() {
+		if (phase == SubPhase.LOGIN) {
+			String uname = unameField.getText();
+			String pass = new String(pwf.getPassword());
+			boolean c1 = uname.length() > 0;
+			boolean c2 = pass.length() > 0;
+			return c1&&c2;
+		}
+		else if (phase == SubPhase.NEWUSER) {
+			String uname = unameField.getText();
+			String pass = new String(pwf.getPassword());
+			String passConfirm = new String(pwfconfirm.getPassword());
+			boolean c1 = uname.length() > 0;
+			boolean c2 = pass.length() > 0;
+			boolean c3 = passConfirm.equals(pass);
+			return c1&&c2&&c3;
+		} else return false;
 		
 	}
 	
